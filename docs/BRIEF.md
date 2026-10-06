@@ -20,6 +20,19 @@ connections.
 **Name:** "Mole Analytics" is a working title. We may rename it to something
 more fun and more about events.
 
+## Direction
+
+- **This prototype will be rebuilt into a full product.** It is a separate
+  product from Mole V3, with its own repo and deployment.
+- **It calls two sets of APIs:** Mole V3 (events, organisations, connections)
+  and PLExyz (devices, presence data). It owns its own data only where neither
+  of them holds it.
+- **It uses Mole's branding.** That means the V3 design system
+  (`brand/mole-tokens.css` / `.json` in Mole V3) and Mole's own logo files.
+  The prototype's yellow and the "plexyz" purple are not the brand.
+- **Analytics alone won't sell it.** We still need to work out what makes
+  organisers subscribe. That is a separate piece of work.
+
 ## Pairing a device
 
 1. In Mole, an admin scans the **QR code on the PLExyz device**.
