@@ -1,0 +1,13 @@
+# Supabase settings for the Mole Analytics project (not Mole V3's).
+project_id = "mole-analytics"
+
+# Both functions check who is calling themselves, so Supabase's own JWT check
+# is switched off for them:
+#   api            — callers carry a Mole V3 token, which this project's JWT
+#                    check would reject; api.ts asks Mole V3 instead.
+#   plexyz_webhook — PLExyz has no token at all; the HMAC signature is the check.
+[functions.api]
+verify_jwt = false
+
+[functions.plexyz_webhook]
+verify_jwt = false

@@ -1,0 +1,162 @@
+/* Mole design tokens: one file for Mole V3, Mole Bingo and the marketing sites.
+   Generated from the Mole Design System (tokens.json) by build_tokens.py. Do not edit by hand:
+   change the design system and regenerate, so every product keeps reading the same values. */
+:root {
+  --brand-purple: #7b4fdb;
+  --brand-purple-hover: #624496;
+  --brand-purple-tint: #efe9ff;
+  --brand-purple-text: #6a3fc7;
+  --brand-purple-border: #ddd6fe;
+  --brand-yellow: #ffe812;
+  --brand-yellow-tint: #fffcde;
+  --brand-yellow-text: #7e7200;
+  --brand-ink: #16131f;
+  --brand-base: #f8f7ff;
+  --neutral-fg: var(--brand-ink);
+  --neutral-fg-muted: #57506b;
+  --neutral-fg-subtle: #6a6383;
+  --neutral-fg-disabled: #8d86a0;
+  --neutral-border: #eae3f9;
+  --neutral-border-strong: #d4c3f3;
+  --neutral-surface: #ffffff;
+  --neutral-surface-2: var(--brand-base);
+  --neutral-surface-3: var(--brand-purple-tint);
+  --neutral-on-fill: #ffffff;
+  --scrim: rgba(22, 19, 31, 0.58);
+  --admin: #6d28d9;
+  --admin-tint: #ebe1fa;
+  --admin-text: var(--admin);
+  --admin-on: #ffffff;
+  --loop: #22c55e;
+  --loop-tint: #e0f7e8;
+  --loop-text: #157c3b;
+  --loop-on: var(--brand-ink);
+  --loop-chrome: #1e2235;
+  --loop-ground: #f3f6fa;
+  --events: #ffb088;
+  --events-tint: #fff4ee;
+  --events-text: #c54200;
+  --events-on: var(--brand-ink);
+  --spaces: #5ec8d8;
+  --spaces-tint: #e8f7fa;
+  --spaces-text: #217987;
+  --spaces-on: var(--brand-ink);
+  --status-success: #22c55e;
+  --status-success-tint: #dcfce7;
+  --status-success-text: #1f7a4d;
+  --status-success-border: #bbf7d0;
+  --status-warning: #f59e0b;
+  --status-warning-tint: #fef3c7;
+  --status-warning-text: #8a5a00;
+  --status-warning-border: #fde68a;
+  --status-error: #ef4444;
+  --status-error-tint: #fee2e2;
+  --status-error-text: #b3261e;
+  --status-error-border: #fecaca;
+  --status-info: #3b82f6;
+  --status-info-tint: #dbeafe;
+  --status-info-text: #0a5de3;
+  --status-info-border: #bfdbfe;
+  --rally: var(--brand-base);
+  --rally-deep: #ece3ff;
+  --rally-card: #fffdf3;
+  --rally-tile: var(--neutral-surface);
+  --rally-filled: #fff7e0;
+  --rally-pink: #e84393;
+  --line: rgba(123, 79, 219, 0.16);
+  --line-firm: rgba(123, 79, 219, 0.34);
+  --berry: #c2306e;
+  --lavender: #e6dcff;
+  --pink-soft: #ffe3ee;
+  --mint: #d8f5ea;
+  --mint-ink: #0f6b4e;
+  --mint-bright: #34d399;
+  --board: #171226;
+  --board-2: #221b3a;
+  --board-fg: #f6f3ff;
+  --board-muted: #b8aedc;
+  --board-lilac: #cfc8e8;
+  --board-line: rgba(255, 255, 255, 0.13);
+  --board-line-firm: rgba(255, 255, 255, 0.24);
+  --board-ok: #7de0a8;
+  --pink-mid: #ffc2d6;
+  --amber-soft: #ffd98a;
+  --paper-ground: #faf8f2;
+  --paper: var(--rally-card);
+  --rule: #e2dcce;
+  --rule-firm: #c9c1ae;
+  --soil-0: oklch(0.90 0.045 72);
+  --soil-1: oklch(0.875 0.05 70);
+  --soil-2: oklch(0.85 0.055 69);
+  --soil-3: oklch(0.83 0.06 68);
+  --soil-4: oklch(0.81 0.06 67);
+  --soil-5: oklch(0.79 0.065 66);
+  --void: #0c0a12;
+  --sunny-deep: #f5b800;
+  --purple-deep: #5a36ad;
+  --font-sans: "Poppins", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 999px;
+  --radius-chip: 10px;
+  --radius-panel: 14px;
+  --radius-card: 20px;
+  --radius-rally-panel: 18px;
+  --radius-rally-card: 26px;
+  --radius-feature: 28px;
+  --radius-sheet: 40px;
+  --shadow-subtle: 0 1px 2px rgba(22, 19, 31, 0.04), 0 1px 1px rgba(22, 19, 31, 0.02);
+  --shadow-medium: 0 4px 8px rgba(22, 19, 31, 0.06), 0 2px 4px rgba(22, 19, 31, 0.04);
+  --shadow-large: 0 12px 24px rgba(22, 19, 31, 0.08), 0 4px 8px rgba(22, 19, 31, 0.04);
+  --shadow-elevated: 0 24px 48px rgba(22, 19, 31, 0.12), 0 12px 24px rgba(22, 19, 31, 0.06);
+  --shadow-panel: 0 12px 30px rgba(20, 12, 40, 0.08);
+  --shadow-loud: 0 10px 22px rgba(123, 79, 219, 0.28);
+  --z-base: 1;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-overlay: 1200;
+  --z-modal: 1300;
+  --z-popover: 1400;
+  --z-toast: 1500;
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring: cubic-bezier(0.22, 1.5, 0.5, 1);
+  --gradient-glow: radial-gradient(circle, rgba(255, 232, 18, 0.35), transparent 70%);
+  --gradient-pro: linear-gradient(135deg, var(--brand-purple), var(--purple-deep));
+  --gradient-brand: linear-gradient(120deg, var(--brand-purple), var(--berry));
+  --gradient-soft: linear-gradient(120deg, var(--brand-purple-tint), var(--pink-soft));
+}
+.type-statement { font-family: var(--font-sans); font-size: 38px; line-height: 1.05; font-weight: 900; letter-spacing: -0.035em; }
+.type-figure { font-family: var(--font-sans); font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.type-display { font-family: var(--font-sans); font-size: 28px; line-height: 1.15; font-weight: 900; }
+.type-title { font-family: var(--font-sans); font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.03em; }
+.type-heading { font-family: var(--font-sans); font-size: 20px; line-height: 1.25; font-weight: 800; letter-spacing: -0.03em; }
+.type-subheading { font-family: var(--font-sans); font-size: 18px; line-height: 1.3; font-weight: 800; letter-spacing: -0.02em; }
+.type-lead { font-family: var(--font-sans); font-size: 17px; line-height: 1.4; font-weight: 400; }
+.type-body-lg { font-family: var(--font-sans); font-size: 15px; line-height: 1.55; font-weight: 400; }
+.type-body { font-family: var(--font-sans); font-size: 14px; line-height: 1.55; font-weight: 400; }
+.type-control { font-family: var(--font-sans); font-size: 14px; line-height: 1.5; font-weight: 600; }
+.type-small { font-family: var(--font-sans); font-size: 13px; line-height: 1.55; font-weight: 400; }
+.type-label { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; font-weight: 600; }
+.type-meta { font-family: var(--font-sans); font-size: 12px; line-height: 1.4; font-weight: 400; }
+.type-micro { font-family: var(--font-sans); font-size: 11px; line-height: 1.3; font-weight: 400; }
+.type-eyebrow { font-family: var(--font-sans); font-size: 12px; line-height: 1.3; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.type-eyebrow-sm { font-family: var(--font-sans); font-size: 11px; line-height: 1.3; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase; }
+.type-code { font-family: var(--font-mono); font-size: 13px; line-height: 1.5; font-weight: 500; font-variant-numeric: tabular-nums; }
