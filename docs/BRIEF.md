@@ -29,9 +29,9 @@ is how the sensors work. Tagline: *Feel the crowd.*
 - **It calls two sets of APIs:** Mole V3 (events, organisations, connections)
   and PLExyz (devices, presence data). It owns its own data only where neither
   of them holds it.
-- **It uses Mole's branding.** That means the V3 design system
-  (`brand/mole-tokens.css` / `.json` in Mole V3) and Mole's own logo files.
-  The prototype's yellow and the "plexyz" purple are not the brand.
+- **It uses Mole's branding.** That means sunny-kit, the design system every
+  Mole product follows (8 Oct, `DECISIONS.md` D24): its tokens, fonts, logos
+  and Sunny. The prototype's own yellow and "plexyz" purple are not the brand.
 - **Analytics alone won't sell it.** We still need to work out what makes
   organisers subscribe. That is a separate piece of work.
 

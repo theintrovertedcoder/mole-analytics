@@ -1,5 +1,9 @@
 // The frame around every signed-in page: the Mole lockup, the product name,
 // where you can go, who you are, and — in sample mode — the banner.
+//
+// On brand (sunny-kit docs/products.md, Mole Sense): the canonical Mole logo,
+// never recoloured, then "Sense" in micro caps in Loop's green, the colour that
+// says where you are. The current page in the nav is green for the same reason.
 
 import { CalendarDays, LogOut, Radio } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -20,9 +24,9 @@ export function SampleBanner() {
 
 export function Logo() {
   return (
-    <span className="flex items-center gap-2.5">
-      <img src="/brand/mole-badge.svg" alt="" width={32} height={32} className="h-8 w-8" />
-      <span className="text-[15px] font-extrabold tracking-tight text-ink">{PRODUCT_NAME}</span>
+    <span className="flex items-center gap-2" aria-label={PRODUCT_NAME} role="img">
+      <img src="/brand/mole-logo.svg" alt="" width={82} height={30} className="h-[30px] w-auto" />
+      <span aria-hidden className="mt-1 text-[11px] font-extrabold uppercase tracking-[0.13em] text-loop-text">{PRODUCT_NAME.replace(/^Mole /, '')}</span>
     </span>
   );
 }
@@ -40,7 +44,7 @@ export function Shell({ account, orgs, sample, path, onSignOut, children }: {
       to={to}
       aria-current={active ? 'page' : undefined}
       className={`inline-flex items-center gap-1.5 rounded-chip px-3 py-2 text-sm font-semibold transition-colors
-        ${active ? 'bg-purple-tint text-purple-text' : 'text-fg-muted hover:bg-surface-3 hover:text-ink'}`}
+        ${active ? 'bg-loop-tint text-ink' : 'text-fg-muted hover:bg-surface-3 hover:text-ink'}`}
     >
       {icon}
       {label}
@@ -49,13 +53,16 @@ export function Shell({ account, orgs, sample, path, onSignOut, children }: {
   const sensorsTo = orgs.length === 1 ? `/orgs/${orgs[0]!.orgId}/sensors` : '/sensors';
 
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen bg-loop-ground">
       {sample && <SampleBanner />}
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
           <Link to="/" className="rounded-chip focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple">
             <Logo />
           </Link>
+          {orgs.length === 1 && (
+            <span className="hidden border-l border-line pl-4 text-sm font-semibold text-fg-muted md:inline">{orgs[0]!.orgName}</span>
+          )}
           <nav aria-label="Main" className="flex items-center gap-1">
             {navItem('/', 'Events', <CalendarDays className="h-4 w-4" aria-hidden />, path === '/' || path.startsWith('/events'))}
             {orgs.length > 0 && navItem(sensorsTo, 'Sensors', <Radio className="h-4 w-4" aria-hidden />, path.includes('/sensors'))}

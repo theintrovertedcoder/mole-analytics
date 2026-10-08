@@ -108,11 +108,11 @@ export function TrafficChart({ buckets, label }: { buckets: TrafficBucket[]; lab
         </svg>}
         {a && active != null && (
           <div
-            className="pointer-events-none absolute z-10 -translate-x-1/2 rounded-chip bg-board px-3 py-2 text-xs text-board-fg shadow-medium"
+            className="pointer-events-none absolute z-10 -translate-x-1/2 rounded-chip bg-ink px-3 py-2 text-xs text-on-fill shadow-medium"
             style={{ left: Math.min(Math.max(x(active), 70), w - 70), top: Math.max(0, y(a.count) - 58) }}
           >
             <div className="font-semibold tabular-nums">{formatCount(a.count)} people</div>
-            <div className="text-board-muted">
+            <div className="text-loop-on-dark">
               {formatTime(a.start)}
               {buckets[active + 1] ? ` – ${formatTime(buckets[active + 1]!.start)}` : ''}
             </div>

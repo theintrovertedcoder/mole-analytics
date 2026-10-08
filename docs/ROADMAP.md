@@ -13,17 +13,16 @@ Every item has an ID. Overrule or reorder by naming it.
 
 ---
 
-## 0 · Decisions only you can make (before the brand pass)
+## 0 · Decisions only you can make
 
-These are brand-owner calls. The kit marks rules like them **TBD** and says
-engineers mustn't guess them, so I haven't.
+D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 
-| # | Decision | Why it matters | My recommendation |
-|---|---|---|---|
-| **D-1** | **Which colour set is canonical?** sunny-kit's design-team export and Mole V3's `brand/` disagree on 24 values: ink `#111111` vs `#16131F`, cool greys vs purple-tinted greys, three status text colours, `brand-purple-text` `#784CDA` vs `#6A3FC7`. Mole Sense copied V3's. | Two Mole products would look subtly different side by side | Pick one and copy it to both repos. V3 moved to `#16131F` on 3 Oct, after the export, so ask the design team to re-export from that. |
-| **D-2** | **What is Mole Sense in the product family?** The brand has six surfaces (app, public pages, den, Loop, Events, Spaces) and each has its own main button colour. Mole Sense isn't one of them; today it borrows the app's purple. | Decides the page ground, the main button colour and the sidebar | **A Loop add-on, named by the word "Sense"** like "Loop" is: on `loop-ground`, Loop's sidebar pattern, organisation's name first. It's for organisations, and Loop already holds their events. |
-| **D-3** | **The funnel ribbon is a fourth gradient.** The book allows three (glow, pro, placeholder); the purple-to-yellow stream isn't one of them. | The funnel is the screen people will remember | Ask the design team for a sanctioned "flow" gradient, or switch to single-hue purple steps (allowed today, less striking). |
-| **D-4** | **Sunny and the funnel on a dark panel.** The dark `board` colours come from V3/Rally, not the design-team export, and how Sunny sits on dark is **TBD**: until decided, the kit puts Sunny on a light card or behind a white die-cut. | Same screen | Decide with D-3. Until then, give Sunny the die-cut border. |
+| # | Decision | What you decided |
+|---|---|---|
+| ~~**D-1**~~ | Which colour set is canonical: sunny-kit's or Mole V3's? | **sunny-kit's, for every product.** Mole Sense now copies the kit (D24); Mole V3 has a pull request to follow it. |
+| ~~**D-2**~~ | What is Mole Sense in the product family? | **Purple, green and yellow**, each with one job (D25). Recorded in sunny-kit as the Mole Sense surface. |
+| ~~**D-3**~~ | The funnel's purple-to-yellow stream was a fourth gradient | **My recommendation:** purple alone; yellow is the glow behind Sunny (D26). |
+| ~~**D-4**~~ | Sunny and the funnel on a dark panel | **The white die-cut and the glow**, now a sunny-kit rule; the panel is `loop-navy` (D27). |
 | **D-5** | **What organisers pay for, and how much** | Phases 5–6 depend on it | See `DECISIONS.md`, the last section. |
 
 ---
@@ -34,11 +33,11 @@ engineers mustn't guess them, so I haven't.
 
 | # | Wrong | Fix |
 |---|---|---|
-| **W-1** | `mole-logo.svg` and `mole-badge.svg` are V3's copies, not byte-identical to sunny-kit's canonical files | Copy `sunny-kit/brand/logos/` over them; add a test that they match |
-| **W-2** | The header puts the badge beside "Mole Sense" in bold, which reads as a product logo. The brand says products have no logos and are named by the word | Mole logo, then "Sense" in `micro` caps, then the organisation's name, as Loop's dashboard does |
+| ~~**W-1**~~ | **Fixed 8 Oct.** `mole-logo.svg` and `mole-badge.svg` are V3's copies, not byte-identical to sunny-kit's canonical files | Copy `sunny-kit/brand/logos/` over them; add a test that they match |
+| ~~**W-2**~~ | **Fixed 8 Oct.** The header put the badge beside "Mole Sense" in bold, which reads as a product logo. The brand says products have no logos and are named by the word | Mole logo, then "Sense" in `micro` caps, then the organisation's name, as Loop's dashboard does |
 | **W-3** | Some tap targets are under 44 × 44px: the funnel's ⓘ buttons, rename/delete on zones, the sheet's close button | Grow the hit areas |
 | **W-4** | Status pills ("Reporting", "Waiting for approval", "Not allowed") are colour and word with no icon. The book wants an icon too, because success and Loop share one green | Add the icons |
-| **W-5** | Motion outside the three brand durations: the ribbon morph (650ms), the goal bar (700ms) | 300ms, the *enter* curve |
+| ~~**W-5**~~ | **Fixed 8 Oct.** Motion outside the three brand durations: the ribbon morph (650ms), the goal bar (700ms) | 300ms, the *enter* curve |
 | **W-6** | Waiting and empty states use a spinner or an icon, not Sunny | Sunny's `loading`, `thinking`, `sleeping` and `404` moods, on a `brand-yellow-tint` disc |
 | **W-7** | Deleting and unpairing use the browser's own `confirm()` box | A proper Mole dialog on `z-modal` |
 | **W-8** | `neutral-fg-subtle` is used on the page background (the funnel's footnote, the insights footer); the book allows it on white surfaces only, and wants placeholders in `neutral-fg-disabled` | `neutral-fg-muted` on the page; placeholders as the book says |
@@ -91,7 +90,7 @@ working the way this repo has been built so far.
 | **1.2** | **First-run setup.** A new organiser names their organisation and first event in two screens (creates the Loop organisation in Mole V3 through a new `api_v1` function) | A brand-new organiser reaches "add your first zone" with no help |
 | **1.3** | **Invitations.** Invite a teammate by email; they get a link and a code | An invited teammate sees the event, and nothing else |
 | **1.4** | **Go live:** W-14, W-16, real-data deploy | sense.mole.is shows real events; the health page is green |
-| **1.5** | **Brand pass:** W-1 to W-8, plus D-1 to D-4 once decided | A screen-by-screen check against the kit passes |
+| **1.5** | **Brand pass:** W-3, W-4, W-6 to W-8 (W-1, W-2, W-5 and D-1 to D-4 are done) | A screen-by-screen check against the kit passes |
 | **1.6** | **Staff don't count** (W-9) | A test stand with staff phones shows only the visitors |
 
 ### Phase 2 · Floor plans, booths, sensors, logos · ~3 weeks
@@ -149,7 +148,7 @@ working the way this repo has been built so far.
 
 ## 3 · What I need from you, in order
 
-1. **D-1 to D-4**: the brand decisions, or the go-ahead to ask the design team.
+1. ~~**D-1 to D-4**~~: decided 8 Oct, and built.
 2. `YOUR_TURN.md` steps 1–5, so Phase 1 can go live.
 3. **reka.re**: their API, and the answers to W-10 and W-11 (signal strength, range, address randomisation).
 4. **One friendly organiser and one exhibitor** for the first real event. W-9 and W-11 can only be checked against a real crowd and a hand count.

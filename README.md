@@ -60,6 +60,6 @@ CI runs all of them on every push.
 | `supabase/functions/_shared/` | the code the app and the server share: the funnel arithmetic, the QR rules, the API contract |
 | `supabase/functions/api`, `plexyz_webhook` | the two edge functions |
 | `supabase/migrations/` | this product's database |
-| `brand/` | the Mole design tokens, copied from Mole V3 |
+| `brand/` | the Mole design tokens and fonts, copied from sunny-kit (`brand/README.md`) |
 | `docs/YOUR_TURN.md` | what needs Haziq, in order |
 | `docs/ARCHITECTURE.md` · `DECISIONS.md` · `PLEXYZ_INTEGRATION.md` · `BRIEF.md` | how and why |

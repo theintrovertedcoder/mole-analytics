@@ -32,7 +32,7 @@ export function SignIn({ backend }: { backend: Backend }) {
   // sign-in — and the sample build is public at sense.mole.is.
   if (backend.mode === 'sample') {
     return (
-      <div className="min-h-screen bg-base">
+      <div className="min-h-screen bg-loop-ground">
         <SampleBanner />
         <div className="mx-auto flex max-w-md flex-col px-4 py-16">
           <Logo />
@@ -53,7 +53,7 @@ export function SignIn({ backend }: { backend: Backend }) {
   }
 
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen bg-loop-ground">
       <div className="mx-auto flex max-w-md flex-col px-4 py-16">
         <Logo />
         <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">Sign in with your Mole account</h1>
@@ -106,7 +106,7 @@ export function SignIn({ backend }: { backend: Backend }) {
 
 export function NotConfigured() {
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen bg-loop-ground">
       <div className="mx-auto max-w-md px-4 py-16">
         <Logo />
         <h1 className="mt-10 text-2xl font-black tracking-tight text-ink">This site isn’t connected yet</h1>

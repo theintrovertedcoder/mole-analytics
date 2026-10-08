@@ -7,9 +7,10 @@ const reduced = () =>
  * Eases a list of numbers from where they were to where they are now, so the
  * funnel ribbon flows into its new shape when the slider moves (the
  * prototype's framer-motion morph, without the 40 kB). A change in the number
- * of values, or reduced motion, jumps straight there.
+ * of values, or reduced motion, jumps straight there. 300ms is the brand
+ * book's slowest duration ("slow"; the prototype's was 650ms).
  */
-export function useTween(target: (number | null)[], ms = 650): (number | null)[] {
+export function useTween(target: (number | null)[], ms = 300): (number | null)[] {
   const [shown, setShown] = useState(target);
   const from = useRef(target);
   const key = target.map(v => (v == null ? 'n' : v)).join(',');

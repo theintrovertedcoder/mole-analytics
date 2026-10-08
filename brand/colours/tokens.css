@@ -1,0 +1,111 @@
+/* Mole brand tokens as CSS variables. Fonts are in ../fonts/. */
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/poppins-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 500; font-display: swap; src: url('../fonts/poppins-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/poppins-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 700; font-display: swap; src: url('../fonts/poppins-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 800; font-display: swap; src: url('../fonts/poppins-latin-800-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 900; font-display: swap; src: url('../fonts/poppins-latin-900-normal.woff2') format('woff2'); }
+:root {
+  --font-sans: "Poppins", system-ui, -apple-system, sans-serif;
+  --brand-purple: #7b4fdb;
+  --brand-purple-tint: #f0eaff;
+  --brand-purple-text: #784cda;
+  --brand-purple-border: #ddd6fe;
+  --brand-yellow: #ffe812;
+  --brand-yellow-tint: #fffcde;
+  --brand-yellow-text: #7e7200;
+  --brand-ink: #111111;
+  --brand-base: #f8f7ff;
+  --admin: #6d28d9;
+  --admin-tint: #ebe1fa;
+  --admin-text: #6d28d9;
+  --admin-on: #ffffff;
+  --loop: #22c55e;
+  --loop-tint: #e0f7e8;
+  --loop-text: #157c3b;
+  --loop-on: #111111;
+  --loop-ground: #f5f7f9;
+  --loop-surface-2: #f7faf8;
+  --loop-table-head: #f0f4f1;
+  --loop-border: #dde3ec;
+  --loop-primary-text: #15803d;
+  --loop-sidebar: #1f2937;
+  --loop-sidebar-hover: #374151;
+  --loop-sidebar-border: #4b5563;
+  --loop-sidebar-text: #cbd5e1;
+  --loop-sidebar-label: #94a3b8;
+  --loop-navy: #1e2235;
+  --events: #ffb088;
+  --events-tint: #fff4ee;
+  --events-text: #c54200;
+  --events-on: #111111;
+  --spaces: #5ec8d8;
+  --spaces-tint: #e8f7fa;
+  --spaces-text: #217987;
+  --spaces-on: #111111;
+  --status-success: #22c55e;
+  --status-success-tint: #dcfce7;
+  --status-success-text: #167f3d;
+  --status-success-border: #bbf7d0;
+  --status-warning: #f59e0b;
+  --status-warning-tint: #fef3c7;
+  --status-warning-text: #986206;
+  --status-warning-border: #fde68a;
+  --status-error: #ef4444;
+  --status-error-tint: #fee2e2;
+  --status-error-text: #ce1212;
+  --status-error-border: #fecaca;
+  --status-info: #3b82f6;
+  --status-info-tint: #dbeafe;
+  --status-info-text: #0a5de3;
+  --status-info-border: #bfdbfe;
+  --neutral-fg: #111111;
+  --neutral-fg-muted: #4b5563;
+  --neutral-fg-subtle: #6b7280;
+  --neutral-fg-disabled: #9ca3af;
+  --neutral-border: #e5e7eb;
+  --neutral-border-strong: #d1d5db;
+  --neutral-surface: #ffffff;
+  --neutral-surface-2: #f9fafb;
+  --neutral-surface-3: #f3f4f6;
+  --neutral-on-fill: #ffffff;
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 99px;
+  --radius-chip: 10px;
+  --radius-panel: 14px;
+  --radius-card: 20px;
+  --radius-feature: 28px;
+  --radius-sheet: 40px;
+  --shadow-subtle: 0 1px 2px rgba(17, 17, 17, 0.04), 0 1px 1px rgba(17, 17, 17, 0.02);
+  --shadow-medium: 0 4px 8px rgba(17, 17, 17, 0.06), 0 2px 4px rgba(17, 17, 17, 0.04);
+  --shadow-large: 0 12px 24px rgba(17, 17, 17, 0.08), 0 4px 8px rgba(17, 17, 17, 0.04);
+  --shadow-elevated: 0 24px 48px rgba(17, 17, 17, 0.12), 0 12px 24px rgba(17, 17, 17, 0.06);
+  --z-base: 1;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-overlay: 1200;
+  --z-modal: 1300;
+  --z-popover: 1400;
+  --z-toast: 1500;
+}
+.type-statement { font-family: var(--font-sans); font-size: 38px; line-height: 1.05; font-weight: 900; letter-spacing: -0.035em; }
+.type-display { font-family: var(--font-sans); font-size: 28px; line-height: 1.15; font-weight: 900; }
+.type-title { font-family: var(--font-sans); font-size: 22px; line-height: 1.25; }
+.type-lead { font-family: var(--font-sans); font-size: 17px; line-height: 1.4; }
+.type-body { font-family: var(--font-sans); font-size: 14px; line-height: 1.55; }
+.type-label { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; }
+.type-meta { font-family: var(--font-sans); font-size: 12px; line-height: 1.4; }
+.type-micro { font-family: var(--font-sans); font-size: 11px; line-height: 1.3; }

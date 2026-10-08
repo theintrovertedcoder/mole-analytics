@@ -52,9 +52,13 @@ never by eye.
 
 ## Branding
 
-`brand/` is copied from Mole V3 and must stay identical to it; change the
-design system there and copy the three files over. Tailwind colours are the
-token variables, nothing else.
+`brand/` is copied from [sunny-kit](https://github.com/theintrovertedcoder/sunny-kit),
+the canonical design system for every Mole product (Haziq, 8 Oct). Change it
+there, never here, and copy it over as `brand/README.md` says;
+`brand/sunny-kit.json` holds every copied file's hash and the tests check them.
+Tailwind colours are the token variables, nothing else. Mole Sense is purple
+(main button, data), Loop green (where you are, "Sense", goal reached) and
+yellow (Sunny, the glow, progress to a goal): sunny-kit `docs/products.md`.
 
 ## Git
 

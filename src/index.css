@@ -1,6 +1,7 @@
-/* The Mole tokens first: every colour Tailwind is given is one of these
-   variables (tailwind.config.js). brand/ is copied from Mole V3; see its README. */
-@import '../brand/mole-tokens.css';
+/* The Mole tokens and Poppins first, exactly as sunny-kit ships them (the
+   canonical set for every Mole product). Every colour Tailwind is given is one
+   of these variables (tailwind.config.js). brand/README.md says how to update. */
+@import '../brand/colours/tokens.css';
 
 @tailwind base;
 @tailwind components;
@@ -11,13 +12,14 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  /* Mole Sense screens sit on Loop's ground (sunny-kit docs/products.md). */
   body {
-    background: var(--brand-base);
+    background: var(--loop-ground);
     color: var(--brand-ink);
     font-family: var(--font-sans);
   }
-  /* Mole is a light-only design system today (brand/mole-tokens.json has no
-     dark set), so the page says so rather than letting the browser invert it. */
+  /* Mole is a light-only design system today (brand/colours/tokens.json has
+     no dark set), so the page says so rather than letting the browser invert it. */
   :root { color-scheme: light; }
 }
 

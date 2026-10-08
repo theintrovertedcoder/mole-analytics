@@ -70,12 +70,12 @@ function Scanner({ onCode }: { onCode: (text: string) => void }) {
   }, [onCode]);
 
   return (
-    <div className="relative overflow-hidden rounded-panel bg-board">
+    <div className="relative overflow-hidden rounded-panel bg-ink">
       <video ref={video} muted playsInline className={`aspect-[4/3] w-full object-cover ${state === 'on' ? '' : 'invisible'}`} />
       <canvas ref={canvas} className="hidden" />
       {state === 'on' && <div className="pointer-events-none absolute inset-[18%] rounded-panel border-2 border-white/80" aria-hidden />}
       {state !== 'on' && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center text-sm text-board-fg">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center text-sm text-on-fill">
           {state === 'starting' ? <Camera className="h-6 w-6" aria-hidden /> : <CameraOff className="h-6 w-6" aria-hidden />}
           {state === 'starting' && 'Opening the camera…'}
           {state === 'denied' && 'The camera is blocked for this site. Type the code instead — it’s printed under the QR.'}

@@ -46,18 +46,18 @@ export function StageSheet({ stage, onClose }: { stage: Stage | null; onClose: (
   const rate = shown.value != null && shown.of != null ? formatPercent(shown.value, shown.of) : null;
 
   return (
-    <div className="fixed inset-0 z-[1300]">
+    <div className="fixed inset-0 z-overlay">
       <div
         onClick={onClose}
-        className={`absolute inset-0 transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}
-        style={{ background: 'var(--scrim)' }}
+        className={`absolute inset-0 transition-opacity duration-normal ${open ? 'opacity-100' : 'opacity-0'}`}
+        style={{ background: 'color-mix(in srgb, var(--brand-ink) 58%, transparent)' }}
       />
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="stage-sheet-title"
-        className={`absolute bottom-0 left-0 right-0 flex max-h-[85vh] flex-col rounded-t-[32px] bg-surface p-6 shadow-panel
-          transition-transform duration-300 ease-enter
+        className={`absolute bottom-0 left-0 right-0 flex max-h-[85vh] flex-col rounded-t-[32px] bg-surface p-6 shadow-large
+          transition-transform duration-slow ease-enter
           lg:bottom-0 lg:left-auto lg:top-0 lg:h-full lg:max-h-full lg:w-[400px] lg:rounded-l-[32px] lg:rounded-tr-none
           ${open ? 'translate-x-0 translate-y-0' : 'translate-y-full lg:translate-x-full lg:translate-y-0'}`}
       >
@@ -94,7 +94,7 @@ export function StageSheet({ stage, onClose }: { stage: Stage | null; onClose: (
         </div>
 
         <div className="absolute bottom-6 left-6 right-6 lg:bottom-8">
-          <button onClick={onClose} className="w-full rounded-panel bg-ink py-4 font-semibold text-white transition-transform active:scale-[0.98]">
+          <button onClick={onClose} className="w-full rounded-panel bg-ink py-4 font-semibold text-on-fill transition-transform active:scale-[0.98]">
             Got it
           </button>
         </div>

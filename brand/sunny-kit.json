@@ -1,0 +1,63 @@
+{
+  "repo": "theintrovertedcoder/sunny-kit",
+  "commit": "b3cbdb3",
+  "copied": "2026-10-08",
+  "files": {
+    "brand/colours/tokens.css": {
+      "kit": "brand/colours/tokens.css",
+      "sha256": "1e332a60fa9408f11c7183658365c7b15836b3f9d9b72d1c92d6106776fd4e94"
+    },
+    "brand/colours/tokens.json": {
+      "kit": "brand/colours/tokens.json",
+      "sha256": "4d83a262c6416badcd2d70ea3bc8d04a4b9314ed5762b3b2e5b9c19215bba472"
+    },
+    "brand/fonts/LICENSE-Poppins-OFL.txt": {
+      "kit": "brand/fonts/LICENSE-Poppins-OFL.txt",
+      "sha256": "5c4a92c8f8ce0ab211f4c72889d82383c9644546115d9ba39a4f2d5b8f37014b"
+    },
+    "brand/fonts/poppins-latin-400-normal.woff2": {
+      "kit": "brand/fonts/poppins-latin-400-normal.woff2",
+      "sha256": "7d93459d86585bfcdbb7e0376056226adb25821ee54b96236fe2123e9560929f"
+    },
+    "brand/fonts/poppins-latin-500-normal.woff2": {
+      "kit": "brand/fonts/poppins-latin-500-normal.woff2",
+      "sha256": "cd36de204aca2d5fa263a731f7c20009b5e3d754ba1f1e03c33e93a48f3e7446"
+    },
+    "brand/fonts/poppins-latin-600-normal.woff2": {
+      "kit": "brand/fonts/poppins-latin-600-normal.woff2",
+      "sha256": "f4e80d9dfd374d02989b87a27b5ed4cb78fbb177c27f1478e9a8b0afb7513149"
+    },
+    "brand/fonts/poppins-latin-700-normal.woff2": {
+      "kit": "brand/fonts/poppins-latin-700-normal.woff2",
+      "sha256": "9338e65fc077355c7a87ae0d64cc101e23b9bf8ad78ae65f0f319c857311b526"
+    },
+    "brand/fonts/poppins-latin-800-normal.woff2": {
+      "kit": "brand/fonts/poppins-latin-800-normal.woff2",
+      "sha256": "60bf0aba6526436f3930c58c12047687fbb6bff4dd180cce4613458ed3439ea2"
+    },
+    "brand/fonts/poppins-latin-900-normal.woff2": {
+      "kit": "brand/fonts/poppins-latin-900-normal.woff2",
+      "sha256": "17ea10196a490a8d3b8da162c7d4af9c301c5229f70af90dad6fa33eb951d83f"
+    },
+    "public/brand/mole-logo.svg": {
+      "kit": "brand/logos/mole-logo.svg",
+      "sha256": "c9a7aa8f0bf84aa5c1cab793b2e2619175931a9b11f33c285c6ff2b17b860cf3"
+    },
+    "public/brand/mole-badge.svg": {
+      "kit": "brand/logos/mole-badge.svg",
+      "sha256": "15517c81a87adde99a9abfb46b337865e0007a1a44d905ea52144db897e201e5"
+    },
+    "public/favicon.svg": {
+      "kit": "brand/logos/mole-badge.svg",
+      "sha256": "15517c81a87adde99a9abfb46b337865e0007a1a44d905ea52144db897e201e5"
+    },
+    "public/brand/sunny.svg": {
+      "kit": "assets/brand/mole-character.svg",
+      "sha256": "21df0938f02e434ac3c01b0ba83ade3b00f69ec3b5d44b45639174e1b7f1c481"
+    },
+    "public/brand/sunny-delighted.svg": {
+      "kit": "brand/sunny/delighted.svg",
+      "sha256": "7bd63f2a2ed7775762d39895ea3475d56d48f972cbfb9a55559f033de27c4ff7"
+    }
+  }
+}

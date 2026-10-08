@@ -14,7 +14,7 @@ export function GoalCard({ stage, goal }: { stage: Stage | undefined; goal: numb
 
   return (
     <section
-      className={`relative overflow-hidden rounded-card border p-6 shadow-subtle transition-colors duration-500
+      className={`relative overflow-hidden rounded-card border p-6 shadow-subtle transition-colors duration-slow
         ${met ? 'border-ok-border bg-ok-tint' : 'border-line bg-surface'}`}
       aria-label="Connection goal"
     >
@@ -54,7 +54,7 @@ export function GoalCard({ stage, goal }: { stage: Stage | undefined; goal: numb
             aria-valuenow={value ?? 0}
           >
             <div
-              className={`h-full rounded-full transition-[width] duration-700 ease-enter ${met ? 'bg-ok' : 'bg-sunny'}`}
+              className={`h-full rounded-full transition-[width] duration-slow ease-enter ${met ? 'bg-ok' : 'bg-sunny'}`}
               style={{ width: `${pct}%` }}
             />
           </div>
