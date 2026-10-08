@@ -4,6 +4,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { TrafficBucket } from '../../supabase/functions/_shared/contract.ts';
+import { monotonePath } from '../domain/curve.ts';
 import { formatCount, formatHour, formatTime } from '../domain/format.ts';
 
 const H = 220;
@@ -40,15 +41,18 @@ export function TrafficChart({ buckets, label }: { buckets: TrafficBucket[]; lab
 
   const { line, area } = useMemo(() => {
     if (buckets.length === 0) return { line: '', area: '' };
-    const pts = buckets.map((b, i) => `${x(i).toFixed(1)},${y(b.count).toFixed(1)}`);
+    // Smooth, as the prototype drew it, but never above a peak or below zero.
+    const curve = monotonePath(buckets.map((b, i) => ({ x: x(i), y: y(b.count) })));
     return {
-      line: `M${pts.join('L')}`,
-      area: `M${x(0)},${y(0)}L${pts.join('L')}L${x(buckets.length - 1)},${y(0)}Z`,
+      line: curve,
+      area: `${curve}L${x(buckets.length - 1)},${y(0)}L${x(0)},${y(0)}Z`,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buckets, w, max]);
 
   const ticks = [0, max / 2, max];
+  // Quarter-hour buckets (the Hour view) label with minutes; hourly ones don't need them.
+  const subHour = buckets.length > 1 && Date.parse(buckets[1]!.start) - Date.parse(buckets[0]!.start) < 3_600_000;
   const every = Math.max(1, Math.ceil(buckets.length / Math.max(2, Math.floor(innerW / 64))));
   const a = active != null ? buckets[active] : null;
 
@@ -92,7 +96,7 @@ export function TrafficChart({ buckets, label }: { buckets: TrafficBucket[]; lab
           <path d={line} fill="none" stroke="var(--brand-purple)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
           {buckets.map((b, i) => (i % every === 0 ? (
             <text key={b.start} x={x(i)} y={H - 8} textAnchor="middle" fontSize={11} fill="var(--neutral-fg-subtle)">
-              {formatHour(b.start)}
+              {subHour ? formatTime(b.start) : formatHour(b.start)}
             </text>
           ) : null))}
           {a && active != null && (

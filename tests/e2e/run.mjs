@@ -79,7 +79,7 @@ await journey('an organiser finds their events, and is told it is sample data', 
 await journey('the whole-event funnel, busy hours and booth ranking all show', async page => {
   await page.goto(BASE);
   await page.getByRole('link', { name: /KL Founders Expo/ }).click();
-  await expectText(page, 'Who came, who stayed');
+  await page.getByRole('list', { name: 'Funnel' }).waitFor();
   const funnel = page.getByRole('list', { name: 'Funnel' });
   await funnel.getByText('At the event', { exact: true }).waitFor();
   const first = await funnel.locator('li').first().innerText();
@@ -93,12 +93,45 @@ await journey('the whole-event funnel, busy hours and booth ranking all show', a
 await journey('narrowing to one booth relabels the funnel and keeps the link', async page => {
   await page.goto(BASE);
   await page.getByRole('link', { name: /KL Founders Expo/ }).click();
-  await expectText(page, 'Who came, who stayed');
+  await page.getByRole('list', { name: 'Funnel' }).waitFor();
   await page.getByLabel('Showing').selectOption({ label: 'Booth A12 · TechFlow' });
   await expectText(page, 'Came to Booth A12 · TechFlow');
   if (!page.url().includes('zone=')) throw new Error(`the view is not in the address: ${page.url()}`);
   await page.reload();
   await expectText(page, 'Came to Booth A12 · TechFlow');
+});
+
+await journey('the funnel opens a stage to explain it, and closes with Escape', async page => {
+  await page.goto(BASE);
+  await page.getByRole('link', { name: /KL Founders Expo/ }).click();
+  await page.getByRole('button', { name: /Stayed 3 min or more/ }).click();
+  const sheet = page.getByRole('dialog');
+  await sheet.getByText('What this means').waitFor();
+  await sheet.getByText('Counted by PLExyz sensors').waitFor();
+  await axe(page, 'the stage sheet');
+  await page.keyboard.press('Escape');
+  await sheet.waitFor({ state: 'detached' });
+});
+
+await journey('percentages, one hour, and the connection goal', async page => {
+  await page.goto(BASE);
+  await page.getByRole('link', { name: /KL Founders Expo/ }).click();
+  const funnel = page.getByRole('list', { name: 'Funnel' });
+  await funnel.waitFor();
+  await page.getByRole('radio', { name: 'Percentages' }).click();
+  await funnel.locator('li').nth(1).getByText(/^\d+(\.\d)?%$/).waitFor();
+  if (!page.url().includes('pct=1')) throw new Error(`percentages are not in the address: ${page.url()}`);
+
+  // The goal: 46 connections made against a goal of 40 is reached.
+  await page.getByRole('radio', { name: 'People' }).click();
+  await page.getByRole('spinbutton').fill('40');
+  await expectText(page, 'Goal reached');
+
+  // One hour: Mole's event-wide number steps aside rather than sitting beside an hour of visits.
+  await page.getByRole('radio', { name: 'Hour' }).click();
+  await page.getByLabel('Which hour').selectOption({ index: 3 });
+  await funnel.getByText('Mole counts this for the whole event').waitFor();
+  await expectText(page, 'quarter-hour');
 });
 
 await journey("an exhibitor's funnel ends with the people who left their details", async page => {
@@ -107,7 +140,7 @@ await journey("an exhibitor's funnel ends with the people who left their details
   await expectText(page, 'Came to your stand');
   await expectText(page, 'Left their details');
   // No venue sensor at someone else's event: said, not invented.
-  await expectText(page, 'Not measured.');
+  await expectText(page, 'Not measured');
 });
 
 await journey('an event with no sensors says how to start, not zeros', async page => {
@@ -145,7 +178,7 @@ await journey('pairing a sensor: scan or type, wait for the owner, paired', asyn
 await journey('a phone sees the dashboard without sideways scrolling', async page => {
   await page.goto(BASE);
   await page.getByRole('link', { name: /KL Founders Expo/ }).click();
-  await expectText(page, 'Who came, who stayed');
+  await page.getByRole('list', { name: 'Funnel' }).waitFor();
   const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   if (over > 1) throw new Error(`the page is ${over}px wider than the phone`);
 }, { width: 390, height: 844 });

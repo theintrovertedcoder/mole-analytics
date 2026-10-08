@@ -48,7 +48,7 @@ The backend deploys from GitHub: Actions → **Deploy backend**.
 |---|---|
 | `npm run check` | typecheck · lint · unit tests · build · first-load budget · secrets audit |
 | `npm run test:db` | the database against a real Postgres 16 |
-| `npm run test:e2e` | eight journeys in Chromium, with axe on each page |
+| `npm run test:e2e` | eleven journeys in Chromium, with axe on each page |
 
 CI runs all of them on every push.
 

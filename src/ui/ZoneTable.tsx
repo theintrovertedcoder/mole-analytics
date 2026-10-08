@@ -39,7 +39,7 @@ export function ZoneTable({ stats, zones, onFocus }: { stats: ZoneStats[]; zones
                 </div>
               </td>
               <td className="px-3 py-2.5 text-right tabular-nums text-fg-muted">{formatPercent(s.stayed, s.visitors) ?? '—'}</td>
-              <td className="px-3 py-2.5 text-right tabular-nums text-fg-muted">{formatDuration(s.medianDwellSeconds)}</td>
+              <td className="whitespace-nowrap px-3 py-2.5 text-right tabular-nums text-fg-muted">{formatDuration(s.medianDwellSeconds)}</td>
             </tr>
           ))}
         </tbody>

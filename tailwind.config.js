@@ -35,7 +35,7 @@ export default {
         warn: { DEFAULT: v('status-warning'), tint: v('status-warning-tint'), text: v('status-warning-text'), border: v('status-warning-border') },
         bad: { DEFAULT: v('status-error'), tint: v('status-error-tint'), text: v('status-error-text'), border: v('status-error-border') },
         info: { DEFAULT: v('status-info'), tint: v('status-info-tint'), text: v('status-info-text'), border: v('status-info-border') },
-        board: { DEFAULT: v('board'), 2: v('board-2'), fg: v('board-fg'), muted: v('board-muted') },
+        board: { DEFAULT: v('board'), 2: v('board-2'), fg: v('board-fg'), muted: v('board-muted'), ok: v('board-ok') },
       },
       borderRadius: {
         chip: v('radius-chip'),

@@ -5,6 +5,7 @@
 
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { GLASS_ALPHA } from '../../src/ui/FlowFunnel.tsx';
 // @ts-expect-error — plain JS config, no types needed for this test
 import tailwind from '../../tailwind.config.js';
 
@@ -65,6 +66,33 @@ describe('brand contrast', () => {
   it('can tell a failing pair from a passing one', () => {
     // The control: white on Loop green, the pair that started the rule.
     expect(contrast(WHITE, '#22c55e')).toBeLessThan(2.5);
+  });
+});
+
+// The funnel's words sit on dark glass over the ribbon (FlowFunnel.tsx,
+// GLASS_ALPHA, read from there so the two cannot drift). At 0.72 this failed
+// over the yellow end at 4.0:1; 0.82 is the least that passes. What they must clear depends on what the glass is over, so
+// every colour the ribbon passes through is tried, including its yellow end,
+// where the prototype's white numbers were about 1.3:1.
+describe('the funnel glass', () => {
+  const hex = (n: number[]) => '#' + n.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
+  const rgb = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const over = (top: string, a: number, bottom: string) => hex(rgb(top).map((c, i) => c * a + rgb(bottom)[i]! * (1 - a)));
+  const mix = (a: string, b: string, t: number) => hex(rgb(a).map((c, i) => c + (rgb(b)[i]! - c) * t));
+  const GLASS = GLASS_ALPHA;
+  const ribbonColours = [0, 0.25, 0.5, 0.75, 1].map(t => mix(c('brand-purple'), c('brand-yellow'), t)).concat(c('board'));
+
+  it.each(ribbonColours)('words stay readable over %s', under => {
+    const glass = over(c('board'), GLASS, under);
+    expect(contrast(c('board-fg'), glass)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(c('board-muted'), glass)).toBeGreaterThanOrEqual(4.5);
+    // The pills: a 13% white wash, and the goal's 20% green one.
+    expect(contrast(c('board-fg'), over('#ffffff', 0.13, glass))).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(c('board-ok'), over(c('board-ok'), 0.2, glass))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('would have caught the prototype', () => {
+    expect(contrast('#ffffff', c('brand-yellow'))).toBeLessThan(1.5);
   });
 });
 
