@@ -52,7 +52,7 @@ one) before the existing `ingest_presence`. Nothing downstream changes.
 
 ## Settings
 
-Edge-function secrets in the Mole Analytics project:
+Edge-function secrets in the Mole Sense project:
 `PLEXYZ_API_URL`, `PLEXYZ_API_KEY`, `PLEXYZ_WEBHOOK_SECRET`, `VISITOR_KEY_SECRET`.
 Until the first two are set, pairing says plainly that PLExyz isn't connected
 and saves nothing. `/functions/v1/api/health` shows `"plexyz": true` once they are.

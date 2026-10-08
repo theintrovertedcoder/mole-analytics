@@ -1,6 +1,6 @@
 # Working notes for Claude
 
-Mole Analytics is a sibling of Mole V3 (`mole-networking/Mole-V3`). Haziq's
+Mole Sense (sense.mole.is) is a sibling of Mole V3 (`mole-networking/Mole-V3`). Haziq's
 standing rules from that repository's `CLAUDE.md` apply here too. The ones
 that matter most, restated so they are in front of you:
 

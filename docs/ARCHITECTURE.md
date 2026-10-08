@@ -5,7 +5,7 @@
 | | Owns | This product talks to it with |
 |---|---|---|
 | **Mole V3** (Supabase `czuquiqpsjwpiqmcllbd`) | people, accounts, Loop orgs, events, sign-ups, contacts | the person's own Mole token, against `api_v1_*` only |
-| **Mole Analytics** (its own Supabase project) | zones, sensors and their pairing, visits | the `api` edge function |
+| **Mole Sense** (its own Supabase project) | zones, sensors and their pairing, visits | the `api` edge function |
 | **PLExyz cloud** (reka.re) | the sensors and what they detect | `_shared/plexyz.ts` out; `plexyz_webhook` in |
 
 ## A request, end to end
@@ -66,5 +66,5 @@ the browser has no built-in `BarcodeDetector`.
 | What | Where | How |
 |---|---|---|
 | The app | Railway, from this repository | `railway.json`: `npm ci && npm run build`, then `npm start` |
-| Migrations and functions | the Mole Analytics Supabase project | GitHub → Actions → **Deploy backend** → Run workflow |
+| Migrations and functions | the Mole Sense Supabase project | GitHub → Actions → **Deploy backend** → Run workflow |
 | `api_v1` | Mole V3's project | V3 migration 119, pasted into V3's SQL editor |

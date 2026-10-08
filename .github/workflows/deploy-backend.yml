@@ -1,10 +1,10 @@
-# Deploys the Mole Analytics backend — its database migrations and both edge
+# Deploys the Mole Sense backend — its database migrations and both edge
 # functions — to its own Supabase project. Started by hand, from the Actions
 # tab: Actions → Deploy backend → Run workflow. No terminal needed.
 #
 # Needs three repository secrets (docs/YOUR_TURN.md has the links):
 #   SUPABASE_ACCESS_TOKEN   a personal access token from supabase.com
-#   SUPABASE_PROJECT_REF    the Mole Analytics project's ref (NOT Mole V3's)
+#   SUPABASE_PROJECT_REF    the Mole Sense project's ref (NOT Mole V3's)
 #   SUPABASE_DB_PASSWORD    that project's database password
 
 name: Deploy backend
@@ -29,7 +29,7 @@ jobs:
         run: |
           if [ -z "$PROJECT_REF" ]; then echo "::error::SUPABASE_PROJECT_REF is not set"; exit 1; fi
           if [ "$PROJECT_REF" = "czuquiqpsjwpiqmcllbd" ]; then
-            echo "::error::SUPABASE_PROJECT_REF is Mole V3's project. Mole Analytics deploys to its own project."; exit 1
+            echo "::error::SUPABASE_PROJECT_REF is Mole V3's project. Mole Sense deploys to its own project."; exit 1
           fi
 
       - uses: supabase/setup-cli@v1

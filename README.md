@@ -1,9 +1,13 @@
-# Mole Analytics
+# Mole Sense
 
-*Working title.* For event organisers and exhibitors: who came, who visited
+**Feel the crowd.** For event organisers and exhibitors: who came, who visited
 which booth, who stayed, and who connected. The counts come from
 [PLExyz](https://reka.re) Wi-Fi presence sensors; the connections come from
 Mole.
+
+Moles barely see; they feel footsteps through the ground. The sensors work
+the same way: they notice phones nearby and never see who anyone is. It will
+live at **sense.mole.is**.
 
 It is a separate product from Mole V3, with its own repository and its own
 backend. People sign in with their Mole account, and it reads Mole only
@@ -12,7 +16,7 @@ through Mole V3's read-only `api_v1`.
 ```
  browser ──sign-in, events, outcomes──▶ Mole V3 (Supabase: auth + api_v1_* functions)
     │
-    └──zones, sensors, numbers──▶ api ─┐   Mole Analytics' own Supabase project
+    └──zones, sensors, numbers──▶ api ─┐   Mole Sense's own Supabase project
                                        ├─▶ zones · devices · presence_sessions
  PLExyz cloud ──signed webhooks──▶ plexyz_webhook ─┘
 ```

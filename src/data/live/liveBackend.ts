@@ -33,7 +33,7 @@ export function liveBackend(cfg: LiveConfig): Backend {
   const auth = new AuthClient({
     url: `${cfg.moleUrl}/auth/v1`,
     headers: { apikey: cfg.moleAnonKey, Authorization: `Bearer ${cfg.moleAnonKey}` },
-    storageKey: 'mole-analytics-auth',
+    storageKey: 'mole-sense-auth',
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
@@ -79,7 +79,7 @@ export function liveBackend(cfg: LiveConfig): Backend {
       });
     } catch (e) {
       if (e instanceof UserFacingError) throw e;
-      throw new UserFacingError("Couldn't reach Mole Analytics. Check your connection and try again.");
+      throw new UserFacingError("Couldn't reach Mole Sense. Check your connection and try again.");
     }
     const json = await res.json().catch(() => null);
     if (!res.ok) {

@@ -1,4 +1,4 @@
-# Mole Analytics — brief
+# Mole Sense — brief
 
 Working notes. The Google AI Studio prototype ("Remix: Mole Analytics v1.1")
 is in this repository's history at commit `5294055`. It has been rebuilt as the
@@ -13,13 +13,14 @@ connections.
 
 - **The top of the funnel comes from PLExyz.** PLExyz is an IoT device built by
   [reka.re](https://reka.re) that detects Wi-Fi devices to measure and monitor
-  how people move within a space. Mole Analytics reads that data from the
+  how people move within a space. Mole Sense reads that data from the
   **PLExyz cloud API** and shows it in the dashboards.
 - **The bottom of the funnel comes from Mole V3**, which already records card
   taps, saved contacts, requests and event check-ins.
 
-**Name:** "Mole Analytics" is a working title. We may rename it to something
-more fun and more about events.
+**Name:** **Mole Sense**, at **sense.mole.is** (8 Oct; it was "Mole Analytics"
+until then). Moles barely see; they feel footsteps through the ground, which
+is how the sensors work. Tagline: *Feel the crowd.*
 
 ## Direction
 

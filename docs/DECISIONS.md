@@ -24,7 +24,7 @@ ahead without stopping on each one. **Overrule any of them by naming the line.**
 | **D17** | **PLExyz behind one adapter** (`_shared/plexyz.ts`) whose HTTP shapes are assumed | Lets everything else be built and tested before reka.re's API docs arrive; only that file changes when they do. |
 | **D18** | **Backend deploys from a GitHub Actions button**, not a terminal | Haziq's rule: no terminal commands. The workflow refuses to deploy into Mole V3's project. |
 | **D19** | **Light only** | The Mole design tokens have no dark set yet. |
-| **D20** | **"Mole Analytics" stays the working title** | Renaming is `src/config/product.ts`, `index.html`, and this README. |
+| **D20** | **The name is Mole Sense, at `sense.mole.is`** (Haziq, 8 Oct; "Mole Analytics" until then) | Moles barely see and feel footsteps through the ground, which is how the sensors work, privacy included. "Sense" needs no explaining; "analytics" sounded generic and the address could be wanted for something else. Runners-up: Molehill (sounds trivial: "a mountain out of a molehill"), Mole Footfall (barely Mole). |
 
 ## Not decided, and not built
 

@@ -2,7 +2,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Every setting the two functions read, in one place.
 // ─────────────────────────────────────────────────────────────────────────────
-// Set in Supabase → Edge Functions → Secrets for the Mole Analytics project
+// Set in Supabase → Edge Functions → Secrets for the Mole Sense project
 // (docs/YOUR_TURN.md has the link). SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
 // are provided by Supabase itself and are not set by hand.
 //

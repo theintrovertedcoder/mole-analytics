@@ -1,7 +1,7 @@
 -- ─────────────────────────────────────────────────────────────────────────────
--- 20261008000001 · Mole Analytics — what this product owns
+-- 20261008000001 · Mole Sense — what this product owns
 -- ─────────────────────────────────────────────────────────────────────────────
--- This is the Mole Analytics Supabase project, NOT Mole V3's. Events, orgs and
+-- This is the Mole Sense Supabase project, NOT Mole V3's. Events, orgs and
 -- people stay in Mole V3 and are read through its api_v1. What lives here is
 -- only what neither Mole V3 nor PLExyz holds:
 --

@@ -3,7 +3,7 @@ import { createApiHandler } from '../../supabase/functions/_shared/api.ts';
 import type { MoleOrg } from '../../supabase/functions/_shared/contract.ts';
 import { event, fakeMole, fakePlexyz, memoryStore, uuid } from './fakes.ts';
 
-const ORIGIN = 'https://analytics.mole.is';
+const ORIGIN = 'https://sense.mole.is';
 const ORG_A = uuid(), ORG_B = uuid();
 const EV_A = uuid(), EV_B = uuid();
 const orgA: MoleOrg = { orgId: ORG_A, orgName: 'Org A', role: 'ADMIN', scope: 'ORG' };

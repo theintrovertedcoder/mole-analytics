@@ -1,5 +1,5 @@
-# Supabase settings for the Mole Analytics project (not Mole V3's).
-project_id = "mole-analytics"
+# Supabase settings for the Mole Sense project (not Mole V3's).
+project_id = "mole-sense"
 
 # Both functions check who is calling themselves, so Supabase's own JWT check
 # is switched off for them:

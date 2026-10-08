@@ -1,4 +1,4 @@
-# Your turn: Mole Analytics
+# Your turn: Mole Sense
 
 **Everything on this page needs you.** In order: each step unblocks the next.
 No step needs a terminal.
@@ -13,7 +13,7 @@ banner saying so. Steps 1–7 replace that with the real thing.
 
 ---
 
-## ☐ 1 · Let Mole Analytics read Mole · 2 minutes
+## ☐ 1 · Let Mole Sense read Mole · 2 minutes
 
 This is **B26** on Mole V3's own list, and the same thing:
 
@@ -28,11 +28,11 @@ functions that answer with counts; it changes nothing that exists.
 
 → **Done when:** the row reads `4 | 0`.
 
-## ☐ 2 · Create the Mole Analytics Supabase project · 5 minutes
+## ☐ 2 · Create the Mole Sense Supabase project · 5 minutes
 
 **https://supabase.com/dashboard/new**
 
-- Name: **Mole Analytics**. Region: **Southeast Asia (Singapore)**, the same as Mole V3.
+- Name: **Mole Sense**. Region: **Southeast Asia (Singapore)**, the same as Mole V3.
 - **Save the database password** in your password manager. Step 3 needs it.
 - **This is a new project, not Mole V3.** Nothing about Mole V3 changes.
 
@@ -43,7 +43,7 @@ ref** (the 20 letters). I'll put the exact links for steps 4–5 on this page.
 
 ## ☐ 3 · Give GitHub what it needs to deploy · 5 minutes
 
-**a.** Make a Supabase access token. Name it `mole-analytics deploy`:
+**a.** Make a Supabase access token. Name it `mole-sense deploy`:
 **https://supabase.com/dashboard/account/tokens**
 
 **b.** Add three repository secrets here (**New repository secret** for each):
@@ -76,7 +76,7 @@ Add:
 |---|---|
 | `MOLE_SUPABASE_URL` | `https://czuquiqpsjwpiqmcllbd.supabase.co` |
 | `MOLE_SUPABASE_ANON_KEY` | Mole V3's **anon public** key: https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/settings/api |
-| `APP_ORIGINS` | the app's address from step 6, e.g. `https://analytics.mole.is` (more than one: separate with commas) |
+| `APP_ORIGINS` | the app's address from step 6, `https://sense.mole.is` (more than one: separate with commas) |
 | `VISITOR_KEY_SECRET` | a long random password from your password manager's generator, 40+ characters. **Never change it once events are counted**: it would split everyone into new visitors |
 
 Leave the three `PLEXYZ_…` settings for step 8.
@@ -103,24 +103,34 @@ Leave the three `PLEXYZ_…` settings for step 8.
 | `VITE_MOLE_SUPABASE_ANON_KEY` | Mole V3's anon public key (same as step 5) |
 | `VITE_ANALYTICS_API_URL` | `https://<new ref>.supabase.co/functions/v1/api` |
 
-Then **Settings → Networking → Generate domain**, or add your own (e.g.
-`analytics.mole.is`). Put that address in `APP_ORIGINS` (step 5) if it differs.
+Then give it its address, **sense.mole.is**:
+
+**a.** In Railway, on the service: **Settings → Networking → Custom Domain** →
+type `sense.mole.is`. Railway shows a **CNAME target** (it ends in
+`.up.railway.app`). Copy it.
+
+**b.** In Cloudflare, where mole.is lives: **https://dash.cloudflare.com/** →
+**mole.is** → **DNS** → **Records** → **Add record**:
+Type **CNAME** · Name **`sense`** · Target: what you copied · Proxy status
+**DNS only** (the grey cloud), so Railway can issue the certificate.
+
+Railway's Custom Domain row turns green within a few minutes.
 
 **Never add a `VITE_` variable holding a secret.** Everything starting `VITE_`
 is readable by anyone who opens the site.
 
-→ **Done when:** the address shows "Sign in with your Mole account". No yellow
-sample-data banner.
+→ **Done when:** **https://sense.mole.is** shows "Sign in with your Mole
+account", with no yellow sample-data banner.
 
 ## ☐ 7 · Let Mole sign-in come back to the new site · 2 minutes
 
-Mole V3 only sends people back to addresses it knows. Add the app's address
-under **Redirect URLs**:
+Mole V3 only sends people back to addresses it knows. Add
+**`https://sense.mole.is/**`** under **Redirect URLs**:
 **https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/auth/url-configuration**
 
 Only add to that list. **Don't change the Site URL.**
 
-→ **Done when:** "Continue with Google" on the new site lands you on **Your
+→ **Done when:** "Continue with Google" on sense.mole.is lands you on **Your
 events**, showing your Loop org's events.
 
 ## ☐ 8 · Connect PLExyz · **waiting on reka.re**
@@ -149,12 +159,13 @@ Mole V3 is getting. Add it to the lawyer's email (Mole V3 YOUR_TURN B2).
 
 → **Done when:** the lawyer has said yes, or said what to change.
 
-## ☐ 10 · The name
+## ~~☐ 10 · The name~~ · **done, 8 Oct**
 
-"Mole Analytics" is a working title. When you pick the name, tell me. It's a
-three-file change.
+**Mole Sense**, at **sense.mole.is**. *Feel the crowd.* The app, the docs and
+the setup steps above all use it. Before announcing it publicly, check that
+"Mole Sense" is free to trademark in Malaysia: **https://iponline.myipo.gov.my/**
 
-→ **Done when:** you've picked one, or decided to keep this one.
+→ **Done when:** named. ✓
 
 ---
 

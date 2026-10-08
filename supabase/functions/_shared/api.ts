@@ -136,7 +136,7 @@ route('POST', '/orgs/:orgId/devices', async (c, p) => {
   if (!qr.ok) throw new ApiError('invalid', QR_REASON_TEXT[qr.reason]);
   const label = cleanLabel(body.label ?? qr.code, 'The name');
   if (!c.deps.plexyz) {
-    throw new ApiError('not_configured', "PLExyz isn't connected to Mole Analytics yet, so sensors can't be paired. Nothing was saved.");
+    throw new ApiError('not_configured', "PLExyz isn't connected to Mole Sense yet, so sensors can't be paired. Nothing was saved.");
   }
 
   // Row first, then PLExyz: the unique index on a live pairing is what stops
