@@ -1,8 +1,9 @@
 # Mole Analytics — brief
 
-Working notes. The code in this repo is the Google AI Studio prototype
-("Remix: Mole Analytics v1.1"), committed as exported. Every number in it is
-mocked; nothing calls an API yet.
+Working notes. The Google AI Studio prototype ("Remix: Mole Analytics v1.1")
+is in this repository's history at commit `5294055`. It has been rebuilt as the
+real product (8 Oct): see `ARCHITECTURE.md`, `DECISIONS.md` and, for what needs
+Haziq, `YOUR_TURN.md`.
 
 ## What it is
 
@@ -62,13 +63,13 @@ and whether it is healthy (last seen, battery).
 ## Rules carried over from Mole V3
 
 - PLExyz credentials are **server-side secrets** (edge functions or Railway),
-  never in a `VITE_` variable. The prototype's `vite.config.ts` puts
-  `GEMINI_API_KEY` into the client bundle; that has to change before any real
-  key is used.
+  never in a `VITE_` variable. The prototype's `vite.config.ts` put
+  `GEMINI_API_KEY` into the client bundle. The rebuild removed that, and
+  `npm run audit:secrets` checks every build.
 - **Mole Admin is separate from customer views.** Device inventory and client
   onboarding are Mole Admin work. Booth and event analytics belong in the Loop
   Dashboard (V3's `events.package` = `HOST` / `EXHIBITOR`). The prototype's
-  landing page puts both side by side; that is a demo shortcut, not the design.
+  landing page put both side by side. The rebuild has no admin side at all.
 - **Never show a number that isn't true.** The prototype's "Automated
   Insights" and staffing advice are fixed text. They need real data behind them
   or should be left out.

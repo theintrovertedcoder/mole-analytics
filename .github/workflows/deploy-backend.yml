@@ -1,0 +1,50 @@
+# Deploys the Mole Analytics backend — its database migrations and both edge
+# functions — to its own Supabase project. Started by hand, from the Actions
+# tab: Actions → Deploy backend → Run workflow. No terminal needed.
+#
+# Needs three repository secrets (docs/YOUR_TURN.md has the links):
+#   SUPABASE_ACCESS_TOKEN   a personal access token from supabase.com
+#   SUPABASE_PROJECT_REF    the Mole Analytics project's ref (NOT Mole V3's)
+#   SUPABASE_DB_PASSWORD    that project's database password
+
+name: Deploy backend
+
+on:
+  workflow_dispatch:
+
+concurrency: deploy-backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # The one mistake this workflow must not make: deploying into Mole V3.
+      - name: Refuse to deploy into Mole V3
+        run: |
+          if [ -z "$PROJECT_REF" ]; then echo "::error::SUPABASE_PROJECT_REF is not set"; exit 1; fi
+          if [ "$PROJECT_REF" = "czuquiqpsjwpiqmcllbd" ]; then
+            echo "::error::SUPABASE_PROJECT_REF is Mole V3's project. Mole Analytics deploys to its own project."; exit 1
+          fi
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Link the project
+        run: supabase link --project-ref "$PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
+
+      - name: Apply migrations
+        run: supabase db push --password "$SUPABASE_DB_PASSWORD"
+
+      - name: Deploy edge functions
+        # Both check their callers themselves (supabase/config.toml says why).
+        run: supabase functions deploy api plexyz_webhook --no-verify-jwt --project-ref "$PROJECT_REF"
+
+      - name: Where to check it
+        run: echo "Open https://$PROJECT_REF.supabase.co/functions/v1/api/health in a browser."

@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Unit tests
+        run: npm test
+
+      # The database: anon gets nothing, and the SQL report equals presence.ts.
+      # ubuntu-24.04 ships PostgreSQL 16, installed but not running.
+      - name: Database tests
+        run: PGBIN=$(ls -d /usr/lib/postgresql/*/bin | sort -V | tail -1) npm run test:db
+
+      # A build with no settings at all must succeed: CI has no keys, and
+      # sample mode is what the journeys below drive.
+      - name: Build (sample data)
+        run: npm run build
+        env:
+          VITE_SAMPLE_DATA: 'true'
+      - name: First-load budget
+        run: npm run budget
+      - name: No secrets in the build
+        run: npm run audit:secrets
+
+      - name: Install Chromium
+        run: npx playwright-core install --with-deps chromium
+      - name: Journeys in a browser
+        run: node tests/e2e/run.mjs
+      - name: Screenshots of failed journeys
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-shots
+          path: tests/e2e/shots
