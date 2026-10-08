@@ -1,0 +1,29 @@
+/* The Mole tokens first: every colour Tailwind is given is one of these
+   variables (tailwind.config.js). brand/ is copied from Mole V3; see its README. */
+@import '../brand/mole-tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    background: var(--brand-base);
+    color: var(--brand-ink);
+    font-family: var(--font-sans);
+  }
+  /* Mole is a light-only design system today (brand/mole-tokens.json has no
+     dark set), so the page says so rather than letting the browser invert it. */
+  :root { color-scheme: light; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
