@@ -15,7 +15,9 @@
     "test:e2e": "VITE_SAMPLE_DATA=true vite build && node tests/e2e/run.mjs",
     "audit:secrets": "node scripts/audit-secrets.mjs dist",
     "budget": "node scripts/check-bundle-budget.mjs dist",
-    "check": "npm run typecheck && npm run lint && npm test && npm run build && npm run budget && npm run audit:secrets"
+    "check": "npm run typecheck && npm run lint && npm test && npm run build && npm run budget && npm run audit:secrets",
+    "deploy:sample": "VITE_SAMPLE_DATA=true vite build && node scripts/audit-secrets.mjs dist && npx --yes wrangler@4 deploy",
+    "deploy": "node scripts/check-live-env.mjs && vite build && node scripts/audit-secrets.mjs dist && npx --yes wrangler@4 deploy"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.3.0",

@@ -150,6 +150,18 @@ await journey('a phone sees the dashboard without sideways scrolling', async pag
   if (over > 1) throw new Error(`the page is ${over}px wider than the phone`);
 }, { width: 390, height: 844 });
 
+await journey('the public sample never asks for a password, and is not indexed', async page => {
+  await page.goto(BASE);
+  await page.getByRole('button', { name: 'Sign out' }).click();
+  await page.getByRole('button', { name: 'Explore the sample' }).waitFor();
+  if (await page.locator('input[type=password]').count()) throw new Error('the sample sign-in page has a password box');
+  const robots = await page.locator('meta[name=robots]').getAttribute('content');
+  if (!/noindex/.test(robots ?? '')) throw new Error(`robots meta is ${robots}`);
+  await axe(page, 'the sample sign-in page');
+  await page.getByRole('button', { name: 'Explore the sample' }).click();
+  await expectText(page, 'Your events');
+});
+
 await journey('an old link says so', async page => {
   await page.goto(`${BASE}/somewhere/else`);
   await expectText(page, 'Nothing at this address');

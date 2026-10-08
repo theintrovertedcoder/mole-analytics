@@ -31,6 +31,17 @@ npm run dev          # http://localhost:3000, on sample data
 With no settings it runs on **sample data**, with a banner on every page saying
 so. To use real data, copy `.env.example` to `.env.local` and fill it in.
 
+## Deploy
+
+The app is a Cloudflare Worker at **https://sense.mole.is** (`wrangler.toml`).
+
+| | |
+|---|---|
+| `npm run deploy` | real data. Needs the three `VITE_` settings in `.env.example`, and refuses without them |
+| `npm run deploy:sample` | the sample site, with its banner and `noindex` |
+
+The backend deploys from GitHub: Actions → **Deploy backend**.
+
 ## Checks
 
 | | |

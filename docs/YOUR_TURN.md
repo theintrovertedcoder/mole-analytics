@@ -8,8 +8,10 @@ their Mole account and showing their real events. Sensor numbers start as soon
 as PLExyz is connected (step 8). Until then the app says plainly that pairing
 isn't connected yet; it doesn't show made-up numbers.
 
-To see it working before any of this, the app runs on sample data with a
-banner saying so. Steps 1–7 replace that with the real thing.
+**It is already online at https://sense.mole.is** (8 Oct), on sample data, with
+a yellow banner on every page saying so. It asks for no password and search
+engines are told not to list it. Steps 1–5 and 7 replace the sample with the
+real thing; step 6 is done.
 
 ---
 
@@ -76,7 +78,7 @@ Add:
 |---|---|
 | `MOLE_SUPABASE_URL` | `https://czuquiqpsjwpiqmcllbd.supabase.co` |
 | `MOLE_SUPABASE_ANON_KEY` | Mole V3's **anon public** key: https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/settings/api |
-| `APP_ORIGINS` | the app's address from step 6, `https://sense.mole.is` (more than one: separate with commas) |
+| `APP_ORIGINS` | the app's address, `https://sense.mole.is` (more than one: separate with commas) |
 | `VISITOR_KEY_SECRET` | a long random password from your password manager's generator, 40+ characters. **Never change it once events are counted**: it would split everyone into new visitors |
 
 Leave the three `PLEXYZ_…` settings for step 8.
@@ -90,42 +92,32 @@ Leave the three `PLEXYZ_…` settings for step 8.
 
 → **Done when:** the health page shows `"ok":true`.
 
-## ☐ 6 · Put the app online · 15 minutes on Railway
+## ~~☐ 6 · Put the app online~~ · **done, 8 Oct**
 
-**https://railway.app** → **New project** → **Deploy from GitHub repo** →
-`theintrovertedcoder/mole-analytics`. It reads `railway.json` by itself.
+**https://sense.mole.is** is live, hosted on Cloudflare the same way as
+rally.mole.is and bingo.mole.is (a Worker named `mole-sense`). Cloudflare made
+the address and its certificate; there was nothing to set up by hand.
 
-**Variables** on that service (these three are public by design, safe in Railway):
+**Look at it now:** open https://sense.mole.is
 
-| Name | Value |
-|---|---|
-| `VITE_MOLE_SUPABASE_URL` | `https://czuquiqpsjwpiqmcllbd.supabase.co` |
-| `VITE_MOLE_SUPABASE_ANON_KEY` | Mole V3's anon public key (same as step 5) |
-| `VITE_ANALYTICS_API_URL` | `https://<new ref>.supabase.co/functions/v1/api` |
+- **Good:** a yellow line across the top saying "Sample data", then
+  "Feel the crowd." and an **Explore the sample** button. That button opens the
+  sample events.
+- **"This site can't be reached" or a certificate warning:** Cloudflare was
+  still issuing the certificate. Wait ten minutes and reload.
+- **Anything else:** send me a screenshot.
 
-Then give it its address, **sense.mole.is**:
+**Going from sample to real** happens after steps 1–5. Tell me the new
+project's ref and I redeploy with the real settings (`npm run deploy`, which
+refuses to run without them). The site moves from sample to real in one go.
 
-**a.** In Railway, on the service: **Settings → Networking → Custom Domain** →
-type `sense.mole.is`. Railway shows a **CNAME target** (it ends in
-`.up.railway.app`). Copy it.
-
-**b.** In Cloudflare, where mole.is lives: **https://dash.cloudflare.com/** →
-**mole.is** → **DNS** → **Records** → **Add record**:
-Type **CNAME** · Name **`sense`** · Target: what you copied · Proxy status
-**DNS only** (the grey cloud), so Railway can issue the certificate.
-
-Railway's Custom Domain row turns green within a few minutes.
-
-**Never add a `VITE_` variable holding a secret.** Everything starting `VITE_`
-is readable by anyone who opens the site.
-
-→ **Done when:** **https://sense.mole.is** shows "Sign in with your Mole
-account", with no yellow sample-data banner.
+→ **Done when:** https://sense.mole.is shows the sample, as above. ✓
 
 ## ☐ 7 · Let Mole sign-in come back to the new site · 2 minutes
 
-Mole V3 only sends people back to addresses it knows. Add
-**`https://sense.mole.is/**`** under **Redirect URLs**:
+Needed once the site is on real data (after step 5). Mole V3 only sends
+people back to addresses it knows. Add **`https://sense.mole.is/**`** under
+**Redirect URLs**:
 **https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/auth/url-configuration**
 
 Only add to that list. **Don't change the Site URL.**

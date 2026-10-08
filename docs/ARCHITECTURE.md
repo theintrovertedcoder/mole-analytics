@@ -65,6 +65,6 @@ the browser has no built-in `BarcodeDetector`.
 
 | What | Where | How |
 |---|---|---|
-| The app | Railway, from this repository | `railway.json`: `npm ci && npm run build`, then `npm start` |
+| The app | Cloudflare Worker `mole-sense` at **sense.mole.is**, like rally.mole.is and bingo.mole.is | `npm run deploy` (real data; refuses without its three settings) or `npm run deploy:sample` (`wrangler.toml`) |
 | Migrations and functions | the Mole Sense Supabase project | GitHub → Actions → **Deploy backend** → Run workflow |
 | `api_v1` | Mole V3's project | V3 migration 119, pasted into V3's SQL editor |

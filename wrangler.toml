@@ -1,0 +1,13 @@
+# Mole Sense on Cloudflare, the same way as rally.mole.is and bingo.mole.is:
+# a Worker that serves the built app (dist/) on its own mole.is address.
+name = "mole-sense"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./dist"
+# The app routes in the browser, so any unknown path gets index.html.
+not_found_handling = "single-page-application"
+
+[[routes]]
+pattern = "sense.mole.is"
+custom_domain = true

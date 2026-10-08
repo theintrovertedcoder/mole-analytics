@@ -27,9 +27,33 @@ export function SignIn({ backend }: { backend: Backend }) {
     }
   };
 
+  // Sample mode asks for nothing. A form that accepted any password would
+  // teach people to type their real Mole password into a page that isn't Mole
+  // sign-in — and the sample build is public at sense.mole.is.
+  if (backend.mode === 'sample') {
+    return (
+      <div className="min-h-screen bg-base">
+        <SampleBanner />
+        <div className="mx-auto flex max-w-md flex-col px-4 py-16">
+          <Logo />
+          <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">{PRODUCT_TAGLINE}</h1>
+          <p className="mt-2 text-sm text-fg-muted">
+            {PRODUCT_NAME} shows event organisers and exhibitors who came, who stopped at each booth, who stayed, and who
+            connected. This is a tour on made-up numbers; nothing to sign in to.
+          </p>
+          <Button className="mt-8 w-full" busy={busy !== null} onClick={async () => {
+            setBusy('password');
+            try { await backend.signInWithGoogle(); } finally { setBusy(null); }
+          }}>
+            Explore the sample
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-base">
-      {backend.mode === 'sample' && <SampleBanner />}
       <div className="mx-auto flex max-w-md flex-col px-4 py-16">
         <Logo />
         <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">Sign in with your Mole account</h1>

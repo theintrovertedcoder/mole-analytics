@@ -25,6 +25,8 @@ ahead without stopping on each one. **Overrule any of them by naming the line.**
 | **D18** | **Backend deploys from a GitHub Actions button**, not a terminal | Haziq's rule: no terminal commands. The workflow refuses to deploy into Mole V3's project. |
 | **D19** | **Light only** | The Mole design tokens have no dark set yet. |
 | **D20** | **The name is Mole Sense, at `sense.mole.is`** (Haziq, 8 Oct; "Mole Analytics" until then) | Moles barely see and feel footsteps through the ground, which is how the sensors work, privacy included. "Sense" needs no explaining; "analytics" sounded generic and the address could be wanted for something else. Runners-up: Molehill (sounds trivial: "a mountain out of a molehill"), Mole Footfall (barely Mole). |
+| **D21** | **Hosted on Cloudflare** (a Worker serving `dist/`), not Railway | mole.is and the other Mole sites (rally, bingo, arcade, archive, preview) are already there; one place, automatic certificate, no new account. |
+| **D22** | **sense.mole.is shows the sample until the backend is live** (8 Oct), with the banner, `noindex`, and no password form | Haziq wanted it live at the new address; the backend needs his accounts first. A sample that took passwords would teach people to type their Mole password into the wrong page. |
 
 ## Not decided, and not built
 

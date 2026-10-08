@@ -63,7 +63,7 @@ and whether it is healthy (last seen, battery).
 
 ## Rules carried over from Mole V3
 
-- PLExyz credentials are **server-side secrets** (edge functions or Railway),
+- PLExyz credentials are **server-side secrets** (edge-function settings),
   never in a `VITE_` variable. The prototype's `vite.config.ts` put
   `GEMINI_API_KEY` into the client bundle. The rebuild removed that, and
   `npm run audit:secrets` checks every build.
