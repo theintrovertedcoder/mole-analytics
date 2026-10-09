@@ -23,7 +23,7 @@ D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 | ~~**D-2**~~ | What is Mole Sense in the product family? | **Purple, green and yellow**, each with one job (D25). Recorded in sunny-kit as the Mole Sense surface. |
 | ~~**D-3**~~ | The funnel's purple-to-yellow stream was a fourth gradient | **My recommendation:** purple alone; yellow is the glow behind Sunny (D26). |
 | ~~**D-4**~~ | Sunny and the funnel on a dark panel | **The white die-cut and the glow**, now a sunny-kit rule; the panel is `loop-navy` (D27). |
-| **D-6** | **May an organiser create their own Loop organisation, free, from Mole Sense?** (roadmap 1.2, and 1.3 after it.) Mole V3 already has the function (`create_loop_account`, a FREE organisation with the caller as admin), but it is deliberately unused: V3 parks it as *"needs the pricing page before a customer can create their own"*. Today only Mole staff create organisations. | Without it, a new organiser signs in and sees no events, and has to ask you. With it, Mole Sense opens self-serve Loop sign-up before the pricing page. | **Yes, for drafts.** Let Sense create the organisation and draft events through new `api_v1_*` functions in V3. V3 already stops a draft being published without the Events entitlement, so nothing goes public unpaid. Invitations (1.3) follow: V3's code-by-email invite, sent from Sense. |
+| ~~**D-6**~~ | May an organiser create their own Loop organisation, or give people access, from Mole Sense? | **No** (Haziq, 9 Oct): *only Mole Admins create organisations and allow access.* Mole Sense never creates an organisation or an event, and never grants access; it shows what Mole V3 already lets a person see (D30). |
 | **D-5** | **What organisers pay for, and how much** | Phases 5–6 depend on it | See `DECISIONS.md`, the last section. |
 
 ---
@@ -65,8 +65,8 @@ D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 
 | # | Wrong | Fix |
 |---|---|---|
-| **W-17** | **Partly fixed 9 Oct:** a code by email, which also makes the account (D29). Invitations are still to come. Sign-in needed an existing Mole account with a password or Google. There's no sign-up, no "forgot password", and no way in for someone the organiser invites | Phase 1 |
-| **W-18** | Who sees what comes only from Loop roles in Mole V3. An organiser can't give an exhibitor access to just their own booth at the organiser's event, and there's no read-only viewer | Phase 3 |
+| ~~**W-17**~~ | **Fixed 9 Oct:** a code by email, which also makes the account (D29); access is given by Mole Admins (D-6). Sign-in needed an existing Mole account with a password or Google. There's no sign-up, no "forgot password", and no way in for someone the organiser invites | Phase 1 |
+| **W-18** | Who sees what comes only from Loop roles in Mole V3. There is no exhibitor access to just one booth, and no read-only viewer | Phase 3, given by Mole Admins (D-6) |
 
 ### Scale and housekeeping
 
@@ -88,8 +88,8 @@ working the way this repo has been built so far.
 | # | What | Done when |
 |---|---|---|
 | ~~**1.1**~~ | **Done 9 Oct**, live once `YOUR_TURN` 7b adds the code to Mole's emails. **Sign in with an email code.** Type your email and get a 6-digit code; no password. It creates the Mole account if there isn't one. Google stays. Uses Mole V3's own sign-in, so it's still one Mole account. | Someone with no Mole account is looking at their events within a minute |
-| **1.2** | *Waiting on D-6.* **First-run setup.** A new organiser names their organisation and first event in two screens (creates the Loop organisation in Mole V3 through a new `api_v1` function) | A brand-new organiser reaches "add your first zone" with no help |
-| **1.3** | *Waiting on D-6.* **Invitations.** Invite a teammate by email; they get a link and a code | An invited teammate sees the event, and nothing else |
+| ~~**1.2**~~ | **Not in Mole Sense (D-6):** Mole Admins create organisations and events. ~~First-run setup.~~ A new organiser names their organisation and first event in two screens (creates the Loop organisation in Mole V3 through a new `api_v1` function) | A brand-new organiser reaches "add your first zone" with no help |
+| ~~**1.3**~~ | **Not in Mole Sense (D-6):** Mole Admins give access. ~~Invitations.~~ Invite a teammate by email; they get a link and a code | An invited teammate sees the event, and nothing else |
 | **1.4** | **Go live:** W-14, W-16, real-data deploy | sense.mole.is shows real events; the health page is green |
 | ~~**1.5**~~ | **Brand pass. Done 9 Oct:** W-1 to W-8 and D-1 to D-4 | A screen-by-screen check against the kit passes |
 | ~~**1.6**~~ | **Staff don't count** (W-9). **Done 9 Oct:** the 3-hour rule, in both copies of the arithmetic | A test stand with staff phones shows only the visitors |
@@ -111,10 +111,10 @@ working the way this repo has been built so far.
 
 | # | What | Done when |
 |---|---|---|
-| **3.1** | **Roles in Mole Sense**: owner, editor, viewer, and **exhibitor** (one booth only) | Each role sees exactly its share, and the tests attempt the rest, as Mole V3's do |
-| **3.2** | **Invite an exhibitor to their booth.** The organiser invites by email; the exhibitor signs in with a code and sees only their booth | An exhibitor can't see another booth's numbers by any route |
+| **3.1** | **Roles, given by Mole Admins (D-6)**: owner, editor, viewer, and **exhibitor** (one booth only), set in Mole Admin and read here through a new `api_v1` function | Each role sees exactly its share, and the tests attempt the rest, as Mole V3's do |
+| **3.2** | **An exhibitor sees their own booth.** A Mole Admin gives the access (D-6); the exhibitor signs in with a code and sees only their booth | An exhibitor can't see another booth's numbers by any route |
 | **3.3** | **The exhibitor dashboard**: their funnel; how they compare with the event's typical booth and its top quarter (anonymous); their busiest hours; how long visits lasted (a histogram); returning visitors; leads from their Mole stand page and card taps at the booth | An exhibitor knows if their stand worked, without asking the organiser |
-| **3.4** | **Share a view-only link** with a sponsor or a boss, expiring after a set time | Opens with no account; stops working when it expires |
+| **3.4** | *Needs your call under D-6:* a **view-only link** for a sponsor or a boss is a kind of access, so either Mole Admins make it, or it's dropped. ~~Share a view-only link, expiring after a set time~~ | Opens with no account; stops working when it expires |
 | **3.5** | **Exhibitors who use Mole** see the booth in their own Mole Sense events list too | No second login for an exhibitor already on Mole |
 
 ### Phase 4 · Live, and alerts · ~2 weeks
@@ -150,7 +150,8 @@ working the way this repo has been built so far.
 ## 3 · What I need from you, in order
 
 1. ~~**D-1 to D-4**~~: decided 8 Oct, and built.
-1. **D-6**: may organisers create their own organisation from Mole Sense? Unblocks 1.2 and 1.3.
+1. ~~**D-6**~~: decided 9 Oct: no. Mole Admins create organisations and give access.
+1. **3.4**: under D-6, do view-only share links exist at all, made by Mole Admins? (Not needed until Phase 3.)
 2. `YOUR_TURN.md` steps 1–5, so Phase 1 can go live.
 3. **reka.re**: their API, and the answers to W-10 and W-11 (signal strength, range, address randomisation).
 4. **One friendly organiser and one exhibitor** for the first real event. W-9 and W-11 can only be checked against a real crowd and a hand count.

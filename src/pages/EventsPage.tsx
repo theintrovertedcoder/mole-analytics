@@ -46,8 +46,8 @@ export function EventsPage({ backend }: { backend: Backend }) {
   if (list.length === 0) {
     return (
       <EmptyState mood="thinking" title="No events yet">
-        Events come from Mole. For now the Mole team sets up an organisation and its events, so ask them, or ask the owner
-        of your organisation to make you an admin or an editor of theirs. It will appear here as soon as they do.
+        Events come from Mole, and the Mole team sets up organisations and gives people access to them. Ask them to add you
+        to your organisation or its event, and it will appear here as soon as they do.
       </EmptyState>
     );
   }

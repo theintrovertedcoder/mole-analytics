@@ -138,17 +138,21 @@ events**, showing your Loop org's events.
 Needed once the site is on real data. Mole Sense now signs people in with a
 6-digit code from their email (no password to make or forget), using Mole V3's
 own sign-in. Mole's emails don't print a code yet, so add one line to two of
-them. Open the email templates:
+them.
+
+**1.** Open the line to paste, press **Raw**, select all, copy:
+**https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/sign-in-code.html**
+
+It is one line: `<p>Or type this code: <strong>{{ .Token }}</strong></p>`
+
+**2.** Open Mole V3's email templates:
 **https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/auth/templates**
 
-**1.** Open **Magic Link**. Under what is already there, paste:
+**3.** Open **Magic Link**. Click at the very end of what is already in the
+message box, press Enter, paste. Press **Save**.
 
-    <p>Or type this code: <strong>{{ .Token }}</strong></p>
-
-Press **Save**.
-
-**2.** Open **Confirm signup** and paste the same line under what is there.
-Press **Save**. (This is the email a brand-new person gets. Mole's own app
+**4.** Open **Confirm signup**, and do the same: at the very end, Enter,
+paste, **Save**. (This is the email a brand-new person gets. Mole's own app
 sends it too, so its sign-ups will also show the code; the link in it keeps
 working as before.)
 
