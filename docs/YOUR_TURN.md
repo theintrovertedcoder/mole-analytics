@@ -167,23 +167,24 @@ key from 0a, sender email `noreply@mole.is`, sender name `Mole`. Save.
 
 Then:
 
-**1.** Open the line to paste, press **Raw**, select all, copy:
-**https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/sign-in-code.html**
-
-It is one line: `<p>Or type this code: <strong>{{ .Token }}</strong></p>`
+**1.** Magic Link: replace the whole email with a code-only one. Mole V3 has
+no magic-link sign-in, so nothing needs the link. Open this, press **Raw**,
+select all, copy:
+**https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/magic-link-body.html**
 
 **2.** Open Mole V3's email templates:
 **https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/auth/templates**
 
-**3.** Open **Magic Link**. Click at the very end of what is already in the
-message box, press Enter, paste. Press **Save**.
+**3.** Open **Magic Link**. Press **Source**, select everything in the body,
+paste. Change **Subject** to `Your Mole sign-in code`. Press **Save**.
 
-**4.** Open **Confirm signup**, and do the same: at the very end, Enter,
-paste, **Save**. (This is the email a brand-new person gets. Mole's own app
-sends it too, so its sign-ups will also show the code; the link in it keeps
-working as before.)
-
-**Don't delete anything in either template**, only add the line.
+**4.** Confirm signup is different: **keep its link** (it's how a new person
+confirms their email) and only add one line at the very end. Open this line,
+press **Raw**, select all, copy:
+**https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/sign-in-code.html**
+Open **Confirm signup**, press **Source**, click at the very end of the body,
+press Enter, paste, **Save**. Afterwards the body must still contain
+`{{ .ConfirmationURL }}`.
 
 → **Done when:** on sense.mole.is you type your email, press **Email me a
 code**, get an email with six digits in it, type them, and land on **Your
