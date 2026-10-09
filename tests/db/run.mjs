@@ -24,7 +24,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { presenceReport } from '../../supabase/functions/_shared/presence.ts';
+import { presenceReport, staffKeys } from '../../supabase/functions/_shared/presence.ts';
 import { normaliseReport } from '../../supabase/functions/_shared/report.ts';
 import { generateSessions } from '../../src/data/sample/generate.ts';
 
@@ -135,7 +135,7 @@ try {
   const z2 = mkZones(EV2, [['Our stand', 'booth']]); // an exhibitor: one booth, no venue sensor
 
   const day = { start: '2026-10-10T01:00:00.000Z', end: '2026-10-10T10:00:00.000Z' };
-  const s1 = generateSessions({ zones: z1, ...day, visitors: 900, seed: 7 });
+  const s1 = generateSessions({ zones: z1, ...day, visitors: 900, seed: 7, staffPerBooth: 2 });
   // Random times almost never land on a bucket edge, so the edges are placed by
   // hand: a mutation from `<` to `<=` at a boundary walked straight past the
   // random fixture alone.
@@ -144,6 +144,14 @@ try {
     { zoneId: z1[2].id, visitorKey: 'edge-2', startedAt: '2026-10-10T03:57:00.000Z', endedAt: '2026-10-10T04:00:00.000Z' },
     { zoneId: z1[3].id, visitorKey: 'edge-3', startedAt: '2026-10-10T09:59:59.000Z', endedAt: '2026-10-10T10:30:00.000Z' },
     { zoneId: z1[3].id, visitorKey: 'edge-4', startedAt: '2026-10-10T10:00:00.000Z', endedAt: '2026-10-10T10:30:00.000Z' },
+    // Either side of the staff line (STAFF_HOURS = 3, at one booth, summed).
+    { zoneId: z1[5].id, visitorKey: 'staff-exact', startedAt: '2026-10-10T01:00:00.000Z', endedAt: '2026-10-10T04:00:00.000Z' },
+    { zoneId: z1[5].id, visitorKey: 'staff-short', startedAt: '2026-10-10T01:00:00.000Z', endedAt: '2026-10-10T03:59:59.000Z' },
+    { zoneId: z1[4].id, visitorKey: 'staff-split', startedAt: '2026-10-10T01:00:00.000Z', endedAt: '2026-10-10T02:30:00.000Z' },
+    { zoneId: z1[4].id, visitorKey: 'staff-split', startedAt: '2026-10-10T05:00:00.000Z', endedAt: '2026-10-10T06:30:00.000Z' },
+    { zoneId: z1[4].id, visitorKey: 'two-booths', startedAt: '2026-10-10T01:00:00.000Z', endedAt: '2026-10-10T03:00:00.000Z' },
+    { zoneId: z1[5].id, visitorKey: 'two-booths', startedAt: '2026-10-10T04:00:00.000Z', endedAt: '2026-10-10T06:00:00.000Z' },
+    { zoneId: z1[6].id, visitorKey: 'room-long', startedAt: '2026-10-10T01:00:00.000Z', endedAt: '2026-10-10T06:00:00.000Z' },
   );
   const s2 = generateSessions({ zones: z2, ...day, visitors: 300, seed: 11 });
 
@@ -211,6 +219,16 @@ try {
     if (!(a.funnel.venue > 500 && a.funnel.visited > 100 && a.funnel.stayed > 10 && a.funnel.stayed < a.funnel.visited)) {
       throw new Error(`a funnel this flat proves nothing: ${JSON.stringify(a.funnel)}`);
     }
+  });
+  check('booth staff are left out, and only booth staff', () => {
+    const staff = staffKeys(z1, s1);
+    const wrong = [['staff-exact', true], ['staff-split', true], ['staff-short', false], ['two-booths', false], ['room-long', false]]
+      .filter(([k, want]) => staff.has(k) !== want).map(([k]) => k);
+    if (wrong.length) throw new Error(`misjudged: ${wrong.join(', ')}`);
+    const generated = [...staff].filter(k => k.includes('-staff')).length;
+    if (generated !== 8) throw new Error(`expected the fixture's 8 staff phones, got ${generated}`);
+    const a = sqlReport(EV1, full);
+    if (a.staffLeftOut !== staff.size) throw new Error(`sql left out ${a.staffLeftOut}, ts ${staff.size}`);
   });
   check('an exhibitor without a venue sensor gets no "at the event" number', () => {
     const a = sqlReport(EV2, full);

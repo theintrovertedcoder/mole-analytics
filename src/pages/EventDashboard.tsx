@@ -13,7 +13,7 @@ import type { EventOutcomes, MoleEvent, Zone } from '../../supabase/functions/_s
 import { clampThreshold, THRESHOLD_DEFAULT, THRESHOLD_MAX, THRESHOLD_MIN } from '../../supabase/functions/_shared/presence.ts';
 import type { Backend } from '../data/backend.ts';
 import { formatCount, formatEventWhen, formatMinutes, formatTime } from '../domain/format.ts';
-import { buildStages, type Stage } from '../domain/funnel.ts';
+import { buildStages, staffNote, type Stage } from '../domain/funnel.ts';
 import { insights, type Insight } from '../domain/insights.ts';
 import { bucketFor, eventDays, eventHours, type Granularity } from '../domain/windows.ts';
 import { Link } from '../lib/Link.tsx';
@@ -366,10 +366,11 @@ export function EventDashboard({ backend, eventId }: { backend: Backend; eventId
           <>
             <div>
               <FlowFunnel stages={stages} showPercent={view.pct} goalMet={goalMet} onOpen={setOpen} />
-              <p className="mt-3 px-2 text-xs text-fg-subtle">
+              <p className="mt-3 px-2 text-xs text-fg-muted">
                 {report.sessions === 0
                   ? 'No visits counted in this window yet. If the event has started, check the sensors are online.'
                   : `${focus ? focus.name : exhibitor ? 'Your stand' : 'The whole event'}${slot ? `, ${slot.label}` : ''}: from ${formatCount(report.sessions)} visits counted by PLExyz sensors, ${formatTime(report.firstSeenAt!)} to ${formatTime(report.lastSeenAt!)}. Tap a stage for what it means.`}
+                {report.staffLeftOut > 0 && ` ${staffNote(report.staffLeftOut)}`}
               </p>
             </div>
 

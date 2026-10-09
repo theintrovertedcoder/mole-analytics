@@ -26,8 +26,14 @@
 //     for nine hours would drag a mean into nonsense.
 //   • Traffic counts unique people PRESENT at any point in a bucket, so
 //     somebody who stayed from 1:50 to 2:10 counts in both hours.
+//   • Booth staff are not visitors. A phone whose visits to any ONE booth add
+//     up to STAFF_HOURS or more, over the whole event (not just the window, so
+//     the same phone is staff whichever hour you look at), is left out of
+//     every number, and the report says how many were. Booths only: a visitor
+//     can sit in a stage room or the main hall all afternoon.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { STAFF_HOURS } from './contract.ts';
 import type {
   PresenceReport, SensorFunnel, TrafficBucket, Zone, ZoneStats,
 } from './contract.ts';
@@ -138,7 +144,23 @@ export function zoneStats(input: ReportInput): ZoneStats[] {
       || (a.zoneId < b.zoneId ? -1 : a.zoneId > b.zoneId ? 1 : 0));
 }
 
-export function presenceReport(input: ReportInput): PresenceReport {
+/** Phones that spent STAFF_HOURS or more at one booth across all of the event's sessions. */
+export function staffKeys(zones: Zone[], sessions: PresenceSession[]): Set<string> {
+  const booths = new Set(zones.filter(z => z.kind === 'booth').map(z => z.id));
+  const seconds = new Map<string, number>();
+  for (const s of sessions) {
+    if (!booths.has(s.zoneId)) continue;
+    const k = `${s.visitorKey}\u0000${s.zoneId}`;
+    seconds.set(k, (seconds.get(k) ?? 0) + dwellSeconds(s));
+  }
+  const staff = new Set<string>();
+  for (const [k, secs] of seconds) if (secs >= STAFF_HOURS * 3600) staff.add(k.split('\u0000')[0]!);
+  return staff;
+}
+
+export function presenceReport(all: ReportInput): PresenceReport {
+  const staff = staffKeys(all.zones, all.sessions);
+  const input = { ...all, sessions: all.sessions.filter(s => !staff.has(s.visitorKey)) };
   const ids = new Set(input.zones.map(z => z.id));
   const f = ms(input.from), t = ms(input.to);
   const inWindow = input.sessions.filter(s =>
@@ -156,6 +178,7 @@ export function presenceReport(input: ReportInput): PresenceReport {
     sessions: inWindow.length,
     firstSeenAt: inWindow.length ? new Date(first).toISOString() : null,
     lastSeenAt: inWindow.length ? new Date(last).toISOString() : null,
+    staffLeftOut: staff.size,
   };
 }
 

@@ -46,7 +46,7 @@ D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 
 | # | Wrong | Fix |
 |---|---|---|
-| **W-9** | **Booth staff count as visitors.** Their phones sit at the stand all day and pass every "stayed" threshold, so a stand with four staff gains four highly engaged visitors per day. The biggest accuracy problem. | Let the organiser or exhibitor register staff devices (via PLExyz), and leave out any one phone present more than N hours |
+| ~~**W-9**~~ | **Fixed 9 Oct (D28)**, by the 3-hour rule; registering staff phones waits on PLExyz. **Booth staff counted as visitors.** Their phones sit at the stand all day and pass every "stayed" threshold, so a stand with four staff gains four highly engaged visitors per day. The biggest accuracy problem. | Let the organiser or exhibitor register staff devices (via PLExyz), and leave out any one phone present more than N hours |
 | **W-10** | **Neighbouring booths double-count.** A phone between two booths can be seen by both sensors | Attribute each moment to the strongest signal, if PLExyz gives signal strength (question 10 in `PLEXYZ_INTEGRATION.md`) |
 | **W-11** | We don't know the sensors' range, or how they handle phones that change their Wi-Fi address (MAC randomisation) | Ask reka.re; calibrate at the first real event against a hand count |
 | **W-12** | Times are fixed to Malaysia | A time zone per event, once Mole V3 events have one |
@@ -91,7 +91,7 @@ working the way this repo has been built so far.
 | **1.3** | **Invitations.** Invite a teammate by email; they get a link and a code | An invited teammate sees the event, and nothing else |
 | **1.4** | **Go live:** W-14, W-16, real-data deploy | sense.mole.is shows real events; the health page is green |
 | **1.5** | **Brand pass:** W-3, W-4, W-6 to W-8 (W-1, W-2, W-5 and D-1 to D-4 are done) | A screen-by-screen check against the kit passes |
-| **1.6** | **Staff don't count** (W-9) | A test stand with staff phones shows only the visitors |
+| ~~**1.6**~~ | **Staff don't count** (W-9). **Done 9 Oct:** the 3-hour rule, in both copies of the arithmetic | A test stand with staff phones shows only the visitors |
 
 ### Phase 2 · Floor plans, booths, sensors, logos · ~3 weeks
 

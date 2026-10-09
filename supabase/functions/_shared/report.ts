@@ -33,5 +33,6 @@ export function normaliseReport(raw: any): PresenceReport {
     sessions: Number(raw?.sessions ?? 0),
     firstSeenAt: iso(raw?.firstSeenAt),
     lastSeenAt: iso(raw?.lastSeenAt),
+    staffLeftOut: Number(raw?.staffLeftOut ?? 0),
   };
 }

@@ -71,8 +71,8 @@ function buildWorld() {
 
   const zonesOf = (e: string) => zones.filter(z => z.eventId === e);
   const sessions: PresenceSession[] = [
-    ...generateSessions({ zones: zonesOf(E_EXPO), start: events[0]!.startsAt!, end: events[0]!.endsAt!, visitors: 1400, seed: 42 }),
-    ...generateSessions({ zones: zonesOf(E_STAND), start: events[1]!.startsAt!, end: events[1]!.endsAt!, visitors: 380, seed: 7 }),
+    ...generateSessions({ zones: zonesOf(E_EXPO), start: events[0]!.startsAt!, end: events[0]!.endsAt!, visitors: 1400, seed: 42, staffPerBooth: 2 }),
+    ...generateSessions({ zones: zonesOf(E_STAND), start: events[1]!.startsAt!, end: events[1]!.endsAt!, visitors: 380, seed: 7, staffPerBooth: 3 }),
   ];
 
   // Check-ins: a share of the people the entrance saw, at the time they came in.

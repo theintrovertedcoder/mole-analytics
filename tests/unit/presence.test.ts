@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  clampThreshold, median, presenceReport, sensorFunnel, traffic, zoneStats,
+  clampThreshold, median, presenceReport, sensorFunnel, staffKeys, traffic, zoneStats,
   type PresenceSession, type ReportInput,
 } from '../../supabase/functions/_shared/presence.ts';
 import type { Zone } from '../../supabase/functions/_shared/contract.ts';
@@ -141,6 +141,42 @@ describe('presenceReport', () => {
     expect(r.sessions).toBe(2);
     expect(r.firstSeenAt).toBe(at('10:00'));
     expect(r.lastSeenAt).toBe(at('11:05'));
+  });
+});
+
+describe('booth staff (W-9)', () => {
+  const room: Zone = { id: 'z-room', eventId: E, name: 'Stage', kind: 'room' };
+  const zones = [venue, boothA, boothB, room];
+
+  it('a phone at one booth for 3 hours, in stretches, is staff; 2h59 is not', () => {
+    const k = staffKeys(zones, [
+      s('z-a', 'staff', '09:00', '10:30'), s('z-a', 'staff', '12:00', '13:30'),
+      s('z-a', 'nearly', '09:00', '11:59'),
+    ]);
+    expect([...k]).toEqual(['staff']);
+  });
+
+  it('time is counted per booth, and rooms and the hall never make anyone staff', () => {
+    const k = staffKeys(zones, [
+      s('z-a', 'roamer', '09:00', '11:00'), s('z-b', 'roamer', '12:00', '14:00'),
+      s('z-room', 'audience', '09:00', '15:00'), s('z-venue', 'all-day', '09:00', '18:00'),
+    ]);
+    expect(k.size).toBe(0);
+  });
+
+  it('staff are left out of every number, whatever the window, and counted', () => {
+    const sessions = [
+      s('z-venue', 'staff', '09:00', '18:00'), s('z-a', 'staff', '09:00', '13:00'), s('z-b', 'staff', '14:00', '14:20'),
+      s('z-venue', 'guest', '10:00', '12:00'), s('z-b', 'guest', '10:00', '10:20'),
+    ];
+    // An afternoon window: the staff phone's booth time was all in the morning.
+    const r = presenceReport(base({ zones, sessions, from: at('14:00'), to: at('18:00') }));
+    expect(r.staffLeftOut).toBe(1);
+    expect(r.funnel.visited).toBe(0);
+    expect(r.zones.find(z => z.zoneId === 'z-b')!.visitors).toBe(0);
+    const day = presenceReport(base({ zones, sessions }));
+    expect(day.funnel).toMatchObject({ venue: 1, visited: 1, stayed: 1 });
+    expect(Math.max(...day.traffic.map(b => b.count))).toBe(1);
   });
 });
 

@@ -96,7 +96,7 @@ describe('staffing', () => {
 describe('the goal stage', () => {
   const report: PresenceReport = {
     funnel: { venue: 1400, visited: 799, stayed: 294, medianDwellSeconds: 113 },
-    traffic: [], zones: [], sessions: 1, firstSeenAt: null, lastSeenAt: null,
+    traffic: [], zones: [], sessions: 1, firstSeenAt: null, lastSeenAt: null, staffLeftOut: 0,
   };
   const outcomes: EventOutcomes = { signups: 623, arrived: 411, teamContacts: 46, arrivalsByHour: [], window: null };
 

@@ -120,7 +120,16 @@ export interface PresenceReport {
   sessions: number;
   firstSeenAt: string | null;
   lastSeenAt: string | null;
+  /** Phones left out of every number above as booth staff (STAFF_HOURS), across the event. */
+  staffLeftOut: number;
 }
+
+/**
+ * A phone at one booth for this many hours or more, over the whole event, is
+ * the booth's staff, not a visitor (W-9). Booths only: a visitor can sit in a
+ * stage room or the main hall all afternoon.
+ */
+export const STAFF_HOURS = 3;
 
 export interface PresenceQuery {
   from: string;

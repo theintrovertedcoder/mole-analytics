@@ -19,6 +19,7 @@
 //     is the organiser's "visited a booth".
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { STAFF_HOURS } from '../../supabase/functions/_shared/contract.ts';
 import type { EventOutcomes, MoleEvent, PresenceReport, Zone } from '../../supabase/functions/_shared/contract.ts';
 import { formatMinutes } from './format.ts';
 
@@ -65,7 +66,7 @@ export function buildStages({ event, report, outcomes, focus, thresholdMinutes, 
       missing: f.venue == null ? 'Add a venue or entrance sensor to count everyone who came.' : null,
       source: 'sensors',
       meaning: 'Everyone who was at the event in this time, whether or not they came near a booth.',
-      how: 'Unique phones seen by any of this event’s sensors. One phone is one person for the whole event.',
+      how: `Unique phones seen by any of this event’s sensors. One phone is one person for the whole event. A phone at one booth for ${STAFF_HOURS} hours or more is that booth’s staff, and is left out of every step.`,
     },
     {
       key: 'visited',
@@ -123,4 +124,11 @@ export function buildStages({ event, report, outcomes, focus, thresholdMinutes, 
     }
   }
   return stages.map(s => ({ ...s, of: s.value == null ? null : s.of }));
+}
+
+/** The line under the funnel that says how many phones were left out as staff (W-9). */
+export function staffNote(n: number): string {
+  return n === 1
+    ? `1 phone that spent ${STAFF_HOURS} hours or more at one booth was left out as booth staff.`
+    : `${n.toLocaleString('en-GB')} phones that spent ${STAFF_HOURS} hours or more at one booth were left out as booth staff.`;
 }

@@ -15,6 +15,11 @@
 // stay one to five hours, and wander into a handful of booths. Most booth
 // visits are a glance; a few are long. Booth popularity is uneven on purpose,
 // because a ranking where every booth is equal tests nothing.
+//
+// With `staffPerBooth`, each booth also gets its staff: phones there most of
+// the day, in two or three stretches between breaks, who also walk past the
+// entrance and drop by other booths. They come from a separate random stream,
+// so adding them doesn't change a single visitor.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { Zone } from '../../../supabase/functions/_shared/contract.ts';
@@ -39,6 +44,8 @@ export interface GenerateOptions {
   end: string;
   visitors: number;
   seed: number;
+  /** Staff phones at each booth (not rooms). Default none. */
+  staffPerBooth?: number;
 }
 
 const MIN = 60_000;
@@ -90,5 +97,30 @@ export function generateSessions(o: GenerateOptions): PresenceSession[] {
       out.push({ zoneId: booth.id, visitorKey: key, startedAt: iso(from), endedAt: iso(Math.max(from, Math.min(leave, from + dwell))) });
     }
   }
+
+  // Staff: a separate stream, so the visitors above are the same with or without them.
+  const rs = rng(o.seed ^ 0x5eed);
+  const standBooths = o.zones.filter(z => z.kind === 'booth');
+  standBooths.forEach((booth, b) => {
+    for (let i = 0; i < (o.staffPerBooth ?? 0); i++) {
+      const key = `s${o.seed}-staff${b}-${i}`;
+      let t = t0 + rs() * 0.05 * span;
+      const end = t0 + span - rs() * 0.05 * span;
+      for (const e of entrances) out.push({ zoneId: e.id, visitorKey: key, startedAt: iso(t), endedAt: iso(t + 2 * MIN) });
+      for (const v of venue) out.push({ zoneId: v.id, visitorKey: key, startedAt: iso(t), endedAt: iso(end) });
+      // On the stand, with a break or two.
+      while (t < end) {
+        const stretch = (60 + rs() * 120) * MIN;
+        out.push({ zoneId: booth.id, visitorKey: key, startedAt: iso(t), endedAt: iso(Math.min(end, t + stretch)) });
+        t += stretch + (10 + rs() * 30) * MIN;
+      }
+      // A look at a neighbour's stand.
+      const other = booths[Math.floor(rs() * booths.length)];
+      if (other && other.id !== booth.id) {
+        const at = t0 + (0.2 + rs() * 0.6) * span;
+        out.push({ zoneId: other.id, visitorKey: key, startedAt: iso(at), endedAt: iso(at + (2 + rs() * 6) * MIN) });
+      }
+    }
+  });
   return out;
 }

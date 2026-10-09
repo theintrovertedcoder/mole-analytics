@@ -87,6 +87,8 @@ await journey('the whole-event funnel, busy hours and booth ranking all show', a
   await expectText(page, 'Booths and rooms');
   await expectText(page, 'What stands out');
   await expectText(page, 'Busiest:');
+  // The sample's 10 booth staff (2 at each of 5 booths) are left out, and it says so.
+  await expectText(page, '10 phones that spent 3 hours or more at one booth were left out as booth staff.');
   await axe(page, 'the event dashboard');
 });
 

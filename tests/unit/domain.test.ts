@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { EventOutcomes, PresenceReport, Zone } from '../../supabase/functions/_shared/contract.ts';
 import { formatDuration, formatPercent } from '../../src/domain/format.ts';
-import { buildStages } from '../../src/domain/funnel.ts';
+import { buildStages, staffNote } from '../../src/domain/funnel.ts';
 import { busiestHour, checkInsVsDetected, insights, stayRate, topZone } from '../../src/domain/insights.ts';
 import { event } from './fakes.ts';
 
@@ -19,6 +19,7 @@ const report = (over: Partial<PresenceReport> = {}): PresenceReport => ({
   sessions: 2000,
   firstSeenAt: '2026-10-10T01:00:00.000Z',
   lastSeenAt: '2026-10-10T04:00:00.000Z',
+  staffLeftOut: 0,
   ...over,
 });
 const outcomes: EventOutcomes = { signups: 70, arrived: 300, teamContacts: 12, arrivalsByHour: [], window: null };
@@ -102,5 +103,12 @@ describe('the event clock', () => {
     const { formatEventWhen, formatHour } = await import('../../src/domain/format.ts');
     expect(formatEventWhen('2026-10-03T01:00:00.000Z', '2026-10-03T10:00:00.000Z')).toMatch(/9:00\s?am – 6:00\s?pm/i);
     expect(formatHour('2026-10-03T05:00:00.000Z')).toBe('1pm');
+  });
+});
+
+describe('the staff note', () => {
+  it('counts in words that read right for one and for many', () => {
+    expect(staffNote(1)).toBe('1 phone that spent 3 hours or more at one booth was left out as booth staff.');
+    expect(staffNote(1200)).toBe('1,200 phones that spent 3 hours or more at one booth were left out as booth staff.');
   });
 });
