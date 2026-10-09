@@ -100,6 +100,7 @@ working the way this repo has been built so far.
 |---|---|---|
 | **2.1** | **Upload a floor plan** (image or PDF) per event, and set its scale by marking one known distance | The plan shows behind the setup screen at the right size |
 | **2.2** | **Draw zones on the plan**: rectangles or outlines for the hall, entrances, booths and rooms, with booth numbers. Replaces today's list | An organiser lays out a 40-booth hall in under 15 minutes |
+| **2.2b** | *Shown early as a heat board (D33):* today's "Zones at a glance" tiles become zones on the plan | The tiles sit where the zones are |
 | **2.3** | **Place sensors on the plan**: drag a paired sensor onto its spot. Its range is drawn as a circle, with warnings where circles overlap (W-10) or leave gaps | Every booth shows whether it's covered |
 | **2.4** | **Test a sensor**: a live view of what each sensor sees right now, for set-up day | The person installing can walk past and watch the number move |
 | **2.5** | **Exhibitors and booths**: each booth gets an exhibitor (company, logo, category, sponsor tier, contact), typed in or imported from the organiser's spreadsheet | 200 exhibitors imported from one CSV |

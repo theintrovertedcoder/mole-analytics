@@ -128,7 +128,7 @@ export function PairSensor({ backend, orgId }: { backend: Backend; orgId: string
     const pending = device.status === 'pending_approval';
     const ok = device.status === 'active';
     return (
-      <div className="mx-auto max-w-lg">
+      <div className="max-w-lg">
         <Card>
           <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-panel ${ok ? 'bg-ok-tint text-ok-text' : pending ? 'bg-warn-tint text-warn-text' : 'bg-bad-tint text-bad-text'}`}>
             {ok ? <CheckCircle2 className="h-6 w-6" aria-hidden /> : pending ? <Clock className="h-6 w-6" aria-hidden /> : <XCircle className="h-6 w-6" aria-hidden />}
@@ -180,7 +180,7 @@ export function PairSensor({ backend, orgId }: { backend: Backend; orgId: string
   }
 
   return (
-    <div className="mx-auto max-w-lg">
+    <div className="max-w-lg">
       <Link to={backTo} className="mb-2 inline-flex min-h-11 items-center text-sm font-semibold text-fg-muted hover:text-ink">← Back</Link>
       <h1 className="text-[28px] font-black tracking-tight text-ink">Pair a sensor</h1>
       <p className="mt-1 text-sm text-fg-muted">Scan the QR on the PLExyz sensor, or type the code printed under it.</p>

@@ -116,7 +116,7 @@ export function SensorsPage({ backend, orgId }: { backend: Backend; orgId: strin
   const past = devices.filter(d => !current.includes(d));
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="max-w-3xl">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs text-fg-muted">{org.orgName}</p>
@@ -154,7 +154,7 @@ export function SensorsIndex({ backend }: { backend: Backend }) {
   if (orgs.status === 'error') return <ErrorNote error={orgs.error} onRetry={orgs.reload} />;
   const list = orgs.data ?? [];
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="max-w-3xl">
       <h1 className="mb-6 text-[28px] font-black tracking-tight text-ink">Sensors</h1>
       {list.length === 0 ? (
         <EmptyState mood="thinking" title="No organisation to pair sensors for">

@@ -143,7 +143,7 @@ export function EventSetup({ backend, eventId }: { backend: Backend; eventId: st
   };
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="max-w-3xl">
       <Link to={`/events/${eventId}`} className="mb-2 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-fg-muted hover:text-ink">
         <ArrowLeft className="h-4 w-4" aria-hidden /> {event.title}
       </Link>

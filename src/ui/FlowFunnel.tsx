@@ -30,8 +30,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { Clock, Handshake, MapPin, Users } from 'lucide-react';
-import type { CSSProperties } from 'react';
 import { formatCount, formatPercent } from '../domain/format.ts';
+import { glass } from '../domain/glass.ts';
 import type { Stage, StageKey } from '../domain/funnel.ts';
 import { ribbon, SLOT } from '../domain/ribbon.ts';
 import { useTween } from '../lib/useTween.ts';
@@ -42,14 +42,6 @@ const ICON: Record<StageKey, typeof Users> = {
   stayed: Clock,
   details: Handshake,
   connections: Handshake,
-};
-
-/** The glass every word on the panel sits on. Its opacity is what the contrast test assumes. */
-export const GLASS_ALPHA = 0.84;
-const glass: CSSProperties = {
-  background: `color-mix(in srgb, var(--loop-navy) ${GLASS_ALPHA * 100}%, transparent)`,
-  backdropFilter: 'blur(6px)',
-  WebkitBackdropFilter: 'blur(6px)',
 };
 
 const eyebrow = (i: number, n: number) => (i === 0 ? 'Start' : i === n - 1 ? 'Goal' : `Step ${i + 1}`);

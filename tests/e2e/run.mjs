@@ -54,6 +54,45 @@ await journey('narrowing to one booth relabels the funnel and keeps the link', a
   await expectText(page, 'Came to Booth A12 · TechFlow');
 });
 
+await journey('the zone map shades each zone, opens its detail, and narrows the funnel to it', async page => {
+  await page.goto(BASE);
+  await page.getByRole('link', { name: /KL Founders Expo/ }).click();
+  await page.getByRole('heading', { name: 'Zones at a glance' }).waitFor();
+  await expectText(page, 'It is not a floor plan');
+  const tile = page.getByRole('button', { name: /^Booth A12 · TechFlow\s*\d+\s*stayed$/ });
+  if ((await tile.getAttribute('aria-pressed')) !== 'false') throw new Error('a tile starts pressed');
+  await tile.click();
+  if ((await tile.getAttribute('aria-pressed')) !== 'true') throw new Error('the tile did not show it was picked');
+  const detail = page.getByRole('region', { name: 'Booth A12 · TechFlow, detail' });
+  await detail.waitFor();
+  await detail.getByText('Typical visit').waitFor();
+  await axe(page, 'a zone’s detail');
+  await page.getByRole('button', { name: 'Close the detail' }).click();
+  await detail.waitFor({ state: 'detached' });
+  await tile.click();
+  await page.getByRole('button', { name: 'Show its funnel' }).click();
+  await expectText(page, 'Came to Booth A12 · TechFlow');
+  if (!page.url().includes('zone=')) throw new Error(`the view is not in the address: ${page.url()}`);
+  // The ranked list is for the whole event; narrowed to one zone it steps aside.
+  if (await page.getByRole('heading', { name: 'Booths and rooms' }).count()) throw new Error('the ranking stayed after narrowing to one zone');
+});
+
+await journey('on a phone the menu is a drawer: it opens, keeps focus, closes, and navigates', async page => {
+  await page.goto(BASE);
+  await page.getByRole('heading', { name: 'Your events' }).waitFor();   // the page has rendered, so "not there" means it
+  if (await page.getByRole('navigation', { name: 'Main' }).isVisible()) throw new Error('the sidebar is showing on a phone');
+  await page.getByRole('button', { name: 'Open the menu' }).click();
+  const menu = page.getByRole('dialog', { name: 'Menu' });
+  await menu.waitFor();
+  await axe(page, 'the open menu');
+  await page.keyboard.press('Escape');
+  await menu.waitFor({ state: 'hidden' });
+  await page.getByRole('button', { name: 'Open the menu' }).click();
+  await menu.getByRole('link', { name: 'Sensors' }).click();
+  await menu.waitFor({ state: 'hidden' });
+  await expectText(page, 'Spare sensor');
+}, { width: 390, height: 844 });
+
 await journey('the funnel opens a stage to explain it, and closes with Escape', async page => {
   await page.goto(BASE);
   await page.getByRole('link', { name: /KL Founders Expo/ }).click();

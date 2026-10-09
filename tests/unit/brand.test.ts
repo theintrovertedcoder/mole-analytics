@@ -6,7 +6,8 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { GLASS_ALPHA } from '../../src/ui/FlowFunnel.tsx';
+import { GLASS_ALPHA } from '../../src/domain/glass.ts';
+import { SHADES } from '../../src/domain/shades.ts';
 // @ts-expect-error — plain JS config, no types needed for this test
 import tailwind from '../../tailwind.config.js';
 // @ts-expect-error — plain JS script, no types needed for this test
@@ -51,6 +52,12 @@ const PAIRS: [string, string, number, string][] = [
   ['neutral-on-fill', 'brand-ink', 4.5, 'chart tooltip'],
   ['loop-sidebar-text', 'brand-ink', 4.5, 'chart tooltip, second line'],
   ['loop-on', 'loop', 4.5, "the funnel goal's pill"],
+  ['loop-text', 'loop-tint', 4.5, 'the current page in the sidebar'],
+  ['neutral-fg-muted', 'neutral-surface-2', 4.5, "the organisation's block in the sidebar"],
+  ['neutral-fg-muted', 'neutral-surface', 4.5, 'sidebar links and the section labels'],
+  ['neutral-on-fill', 'loop-navy', 4.5, 'the sign-in pitch'],
+  ['loop-sidebar-text', 'loop-navy', 4.5, "the sign-in pitch's smaller words"],
+  ['loop', 'loop-navy', 3, "the sign-in pitch's icons"],
   // Marks, not text: 3:1 against what they sit on.
   ['brand-purple', 'neutral-surface', 3, 'the traffic line and zone bars'],
 ];
@@ -137,5 +144,31 @@ describe('the sunny-kit copies', () => {
   it('has an up-to-date Sunny for the dark panel', () => {
     for (const { file, content } of buildOnDark() as { file: string; content: string }[])
       expect(readFileSync(file, 'utf8'), file).toBe(content);
+  });
+});
+
+// The zone map's tiles (src/domain/shades.ts): the text on every shade, with
+// the shade worked out the way the browser mixes it, in sRGB.
+describe('the zone map tiles', () => {
+  const hex = (n: number[]) => '#' + n.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+  const rgb = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const background = (mix: number | null) => {
+    if (mix == null) return c('neutral-surface-3');
+    const [p, w] = [rgb(c('brand-purple')), rgb(c('neutral-surface'))];
+    return hex(p.map((v, i) => (v * mix + w[i]! * (100 - mix)) / 100));
+  };
+
+  it.each(SHADES.map((s, i) => [i, s] as const))('shade %i: its words clear 4.5:1', (_, shade) => {
+    expect(contrast(c(shade.text), background(shade.mix))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it.each(SHADES.map((s, i) => [i, s] as const))('shade %i: the class says the mix the test measured', (_, shade) => {
+    if (shade.mix != null && shade.mix < 100) expect(shade.classes).toContain(`var(--brand-purple)_${shade.mix}%`);
+    expect(shade.classes).toContain(shade.text === 'brand-ink' ? 'text-ink' : 'text-on-fill');
+  });
+
+  it('the shades grow darker, so more means darker', () => {
+    const lum = SHADES.map(s => contrast(background(s.mix), '#000000'));
+    expect(lum).toEqual([...lum].sort((a, b) => b - a));
   });
 });

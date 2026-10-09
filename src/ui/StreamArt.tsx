@@ -4,6 +4,7 @@
 // public, and an invented count on a real site would look real.
 
 import { Clock, Handshake, MapPin, Users } from 'lucide-react';
+import { glass } from '../domain/glass.ts';
 import { ribbon } from '../domain/ribbon.ts';
 
 // Only the shape matters: it narrows, stage by stage, the way a funnel does.
@@ -14,12 +15,6 @@ const STAGES = [
   { label: 'Stayed', Icon: Clock },
   { label: 'Connections made', Icon: Handshake },
 ];
-
-const glass = {
-  background: 'color-mix(in srgb, var(--loop-navy) 84%, transparent)',
-  backdropFilter: 'blur(6px)',
-  WebkitBackdropFilter: 'blur(6px)',
-};
 
 export function StreamArt({ className = '' }: { className?: string }) {
   const r = ribbon(SHAPE, 'h')!;
