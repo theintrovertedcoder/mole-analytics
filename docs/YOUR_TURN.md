@@ -145,18 +145,22 @@ email templates until a custom email sender (SMTP) is set up: the Magic Link
 page shows "Set up custom SMTP to edit templates". Mole V3's launch runbook
 already plans this switch to Resend, which Mole V3 uses for its other emails.
 
-**0a.** Make a key just for this at Resend (Sending access is enough), and keep
-it somewhere private. **Never paste it into a chat or a file:**
+**0a.** Use the Resend key Mole V3 already sends its emails with (the one saved
+as `RESEND_API_KEY`). Supabase never shows a saved secret again, so copy it from
+wherever you keep it (your password manager). If you can't find it, make a new
+one at Resend (Sending access is enough): Resend shows a key only once, and the
+old one keeps working.
 **https://resend.com/api-keys**
+**Never paste the key into a chat or a file.**
 
-**0b.** Check the address you'll send from is on a verified domain (it shows
-**Verified**):
+**0b.** The sender is the one Mole V3 already uses, `Mole <noreply@mole.is>`, so
+its domain is already set up. You can check the domain still says **Verified**:
 **https://resend.com/domains**
 
 **0c.** On the Magic Link page, press **Set up SMTP**:
 **https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/auth/templates**
 Fill in: host `smtp.resend.com`, port `465`, username `resend`, password = the
-key from 0a, and a sender address on the verified domain. Save.
+key from 0a, sender email `noreply@mole.is`, sender name `Mole`. Save.
 
 **0d.** In Resend, check the **Emails** list shows the test email Supabase sends:
 **https://resend.com/emails**
