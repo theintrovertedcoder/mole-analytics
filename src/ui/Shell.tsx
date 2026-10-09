@@ -8,28 +8,9 @@
 import { CalendarDays, LogOut, Radio } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { MoleOrg } from '../../supabase/functions/_shared/contract.ts';
-import { PRODUCT_NAME } from '../config/product.ts';
 import type { Account } from '../data/backend.ts';
 import { Link } from '../lib/Link.tsx';
-
-export function SampleBanner() {
-  return (
-    <div className="bg-sunny-tint text-sunny-text" role="note">
-      <p className="mx-auto max-w-6xl px-4 py-2 text-center text-xs font-semibold sm:px-6">
-        Sample data. Every number on this page is made up, to show how {PRODUCT_NAME} works. Nothing here is a real event.
-      </p>
-    </div>
-  );
-}
-
-export function Logo() {
-  return (
-    <span className="flex items-center gap-2" aria-label={PRODUCT_NAME} role="img">
-      <img src="/brand/mole-logo.svg" alt="" width={82} height={30} className="h-[30px] w-auto" />
-      <span aria-hidden className="mt-1 text-[11px] font-extrabold uppercase tracking-[0.13em] text-loop-text">{PRODUCT_NAME.replace(/^Mole /, '')}</span>
-    </span>
-  );
-}
+import { Logo, SampleBanner } from './Brand.tsx';
 
 export function Shell({ account, orgs, sample, path, onSignOut, children }: {
   account: Account | null;

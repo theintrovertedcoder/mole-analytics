@@ -2,11 +2,12 @@
 // a code by email, Google, or a password, all Mole V3's own sign-in.
 
 import { useEffect, useState, type FormEvent } from 'react';
-import { PRODUCT_NAME, PRODUCT_TAGLINE } from '../config/product.ts';
+import { PRODUCT_NAME } from '../config/product.ts';
 import type { Backend } from '../data/backend.ts';
 import { Button, ErrorNote, Field } from '../ui/kit.tsx';
 import { inputClass } from '../ui/styles.ts';
-import { Logo, SampleBanner } from '../ui/Shell.tsx';
+import { AuthLayout } from '../ui/AuthLayout.tsx';
+import { SampleBanner } from '../ui/Brand.tsx';
 
 export function SignIn({ backend }: { backend: Backend }) {
   // Sample mode asks for nothing. A form that accepted any password would
@@ -19,23 +20,19 @@ export function SignIn({ backend }: { backend: Backend }) {
 function SampleSignIn({ backend }: { backend: Backend }) {
   const [busy, setBusy] = useState(false);
   return (
-    <div className="min-h-screen bg-loop-ground">
-      <SampleBanner />
-      <div className="mx-auto flex max-w-md flex-col px-4 py-16">
-        <Logo />
-        <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">{PRODUCT_TAGLINE}</h1>
-        <p className="mt-2 text-sm text-fg-muted">
-          {PRODUCT_NAME} shows event organisers and exhibitors who came, who stopped at each booth, who stayed, and who
-          connected. This is a tour on made-up numbers; nothing to sign in to.
-        </p>
-        <Button className="mt-8 w-full" busy={busy} onClick={async () => {
-          setBusy(true);
-          try { await backend.signInWithGoogle(); } finally { setBusy(false); }
-        }}>
-          Explore the sample
-        </Button>
-      </div>
-    </div>
+    <AuthLayout banner={<SampleBanner />}>
+      <h1 className="text-[28px] font-black leading-tight tracking-tight text-ink">Take the tour</h1>
+      <p className="mt-2 text-sm text-fg-muted">
+        {PRODUCT_NAME} shows event organisers and exhibitors who came, who stopped at each booth, who stayed, and who
+        connected. This is a tour on made-up numbers; there is nothing to sign in to.
+      </p>
+      <Button className="mt-8 w-full" busy={busy} onClick={async () => {
+        setBusy(true);
+        try { await backend.signInWithGoogle(); } finally { setBusy(false); }
+      }}>
+        Explore the sample
+      </Button>
+    </AuthLayout>
   );
 }
 
@@ -95,16 +92,14 @@ function LiveSignIn({ backend }: { backend: Backend }) {
   };
 
   return (
-    <div className="min-h-screen bg-loop-ground">
-      <div className="mx-auto flex max-w-md flex-col px-4 py-16">
-        <Logo />
-        <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">
+    <AuthLayout>
+        <h1 className="text-[28px] font-black leading-tight tracking-tight text-ink">
           {step === 'code' ? 'Check your email' : 'Sign in with your Mole account'}
         </h1>
         <p className="mt-2 text-sm text-fg-muted">
           {step === 'code'
             ? <>We sent a code to <span className="font-semibold text-ink">{email.trim()}</span>. Type it here to sign in. If it isn’t there, look in spam.</>
-            : <>{PRODUCT_TAGLINE} {PRODUCT_NAME} uses the same account as the Mole app. New to Mole? Type your email and we’ll make you one.</>}
+            : <>{PRODUCT_NAME} uses the same account as the Mole app. Type your email and we’ll send you a code. New to Mole? That makes your account too.</>}
         </p>
 
         <div className="mt-8 rounded-card border border-line bg-surface p-6 shadow-subtle">
@@ -164,27 +159,24 @@ function LiveSignIn({ backend }: { backend: Backend }) {
 
         <p className="mt-6 text-xs text-fg-muted">
           You will see the events of the Loop organisations you run in Mole, and any event you have been made an editor of.
+          The Mole team gives that access, so a new account sees nothing until they do.
         </p>
-      </div>
-    </div>
+    </AuthLayout>
   );
 }
 
 export function NotConfigured() {
   return (
-    <div className="min-h-screen bg-loop-ground">
-      <div className="mx-auto max-w-md px-4 py-16">
-        <Logo />
-        <h1 className="mt-10 text-2xl font-black tracking-tight text-ink">This site isn’t connected yet</h1>
-        <p className="mt-3 text-sm text-fg-muted">
-          {PRODUCT_NAME} was built without the settings that connect it to Mole, so there is nothing to show. It does not
-          fall back to sample numbers, because sample numbers on a real site would look real.
-        </p>
-        <p className="mt-3 text-sm text-fg-muted">
-          For whoever runs it: the three <code className="font-mono text-xs">VITE_</code> settings in{' '}
-          <code className="font-mono text-xs">docs/YOUR_TURN.md</code> are missing from the hosting service.
-        </p>
-      </div>
-    </div>
+    <AuthLayout>
+      <h1 className="text-2xl font-black tracking-tight text-ink">This site isn’t connected yet</h1>
+      <p className="mt-3 text-sm text-fg-muted">
+        {PRODUCT_NAME} was built without the settings that connect it to Mole, so there is nothing to show. It does not
+        fall back to sample numbers, because sample numbers on a real site would look real.
+      </p>
+      <p className="mt-3 text-sm text-fg-muted">
+        For whoever runs it: the three <code className="font-mono text-xs">VITE_</code> settings in{' '}
+        <code className="font-mono text-xs">docs/YOUR_TURN.md</code> are missing from the hosting service.
+      </p>
+    </AuthLayout>
   );
 }
