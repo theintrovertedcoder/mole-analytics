@@ -42,6 +42,8 @@ jobs:
         run: npx playwright-core install --with-deps chromium
       - name: Journeys in a browser
         run: node tests/e2e/run.mjs
+      - name: Live sign-in, against a stand-in for Mole V3
+        run: node tests/e2e/live.mjs
       - name: Screenshots of failed journeys
         if: failure()
         uses: actions/upload-artifact@v4

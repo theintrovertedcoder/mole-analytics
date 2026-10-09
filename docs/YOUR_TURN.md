@@ -11,7 +11,7 @@ isn't connected yet; it doesn't show made-up numbers.
 **It is already online at https://sense.mole.is** (8 Oct), on sample data, with
 a yellow banner on every page saying so. It asks for no password and search
 engines are told not to list it. Steps 1–5 and 7 replace the sample with the
-real thing; step 6 is done.
+real thing (with 7b for the sign-in code); step 6 is done.
 
 ---
 
@@ -124,6 +124,32 @@ Only add to that list. **Don't change the Site URL.**
 
 → **Done when:** "Continue with Google" on sense.mole.is lands you on **Your
 events**, showing your Loop org's events.
+
+## ☐ 7b · Put the sign-in code in Mole's emails · 3 minutes
+
+Needed once the site is on real data. Mole Sense now signs people in with a
+6-digit code from their email (no password to make or forget), using Mole V3's
+own sign-in. Mole's emails don't print a code yet, so add one line to two of
+them. Open the email templates:
+**https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/auth/templates**
+
+**1.** Open **Magic Link**. Under what is already there, paste:
+
+    <p>Or type this code: <strong>{{ .Token }}</strong></p>
+
+Press **Save**.
+
+**2.** Open **Confirm signup** and paste the same line under what is there.
+Press **Save**. (This is the email a brand-new person gets. Mole's own app
+sends it too, so its sign-ups will also show the code; the link in it keeps
+working as before.)
+
+**Don't delete anything in either template**, only add the line.
+
+→ **Done when:** on sense.mole.is you type your email, press **Email me a
+code**, get an email with six digits in it, type them, and land on **Your
+events**. A bad answer is an email with only a link and no number: the line
+went into the wrong template, or wasn't saved.
 
 ## ☐ 8 · Connect PLExyz · **waiting on reka.re**
 

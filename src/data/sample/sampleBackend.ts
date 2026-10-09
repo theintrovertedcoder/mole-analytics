@@ -131,6 +131,8 @@ export function sampleBackend(): Backend {
     async account() { return account; },
     onAccountChange(cb) { listeners.add(cb); return () => listeners.delete(cb); },
     async signInWithPassword(email) { await wait(); account = { id: 'sample-user', email }; tell(); },
+    async sendEmailCode() { await wait(); },
+    async signInWithEmailCode(email) { await wait(); account = { id: 'sample-user', email }; tell(); },
     async signInWithGoogle() { await wait(); account = { id: 'sample-user', email: 'you@example.com' }; tell(); },
     async signOut() { account = null; tell(); },
 

@@ -64,7 +64,7 @@ D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 
 | # | Wrong | Fix |
 |---|---|---|
-| **W-17** | Sign-in needs an existing Mole account with a password or Google. There's no sign-up, no "forgot password", and no way in for someone the organiser invites | Phase 1 |
+| **W-17** | **Partly fixed 9 Oct:** a code by email, which also makes the account (D29). Invitations are still to come. Sign-in needed an existing Mole account with a password or Google. There's no sign-up, no "forgot password", and no way in for someone the organiser invites | Phase 1 |
 | **W-18** | Who sees what comes only from Loop roles in Mole V3. An organiser can't give an exhibitor access to just their own booth at the organiser's event, and there's no read-only viewer | Phase 3 |
 
 ### Scale and housekeeping
@@ -86,7 +86,7 @@ working the way this repo has been built so far.
 
 | # | What | Done when |
 |---|---|---|
-| **1.1** | **Sign in with an email code.** Type your email and get a 6-digit code; no password. It creates the Mole account if there isn't one. Google stays. Uses Mole V3's own sign-in, so it's still one Mole account. | Someone with no Mole account is looking at their events within a minute |
+| ~~**1.1**~~ | **Done 9 Oct**, live once `YOUR_TURN` 7b adds the code to Mole's emails. **Sign in with an email code.** Type your email and get a 6-digit code; no password. It creates the Mole account if there isn't one. Google stays. Uses Mole V3's own sign-in, so it's still one Mole account. | Someone with no Mole account is looking at their events within a minute |
 | **1.2** | **First-run setup.** A new organiser names their organisation and first event in two screens (creates the Loop organisation in Mole V3 through a new `api_v1` function) | A brand-new organiser reaches "add your first zone" with no help |
 | **1.3** | **Invitations.** Invite a teammate by email; they get a link and a code | An invited teammate sees the event, and nothing else |
 | **1.4** | **Go live:** W-14, W-16, real-data deploy | sense.mole.is shows real events; the health page is green |

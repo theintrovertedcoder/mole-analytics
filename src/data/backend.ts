@@ -21,6 +21,12 @@ export interface Backend {
   account(): Promise<Account | null>;
   onAccountChange(cb: (a: Account | null) => void): () => void;
   signInWithPassword(email: string, password: string): Promise<void>;
+  /**
+   * Email a 6-digit code (Mole V3's own sign-in). If there is no Mole account
+   * for the address yet, this makes one: it is the same Mole account the app uses.
+   */
+  sendEmailCode(email: string): Promise<void>;
+  signInWithEmailCode(email: string, code: string): Promise<void>;
   signInWithGoogle(): Promise<void>;
   signOut(): Promise<void>;
 

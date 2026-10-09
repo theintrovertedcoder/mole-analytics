@@ -106,6 +106,19 @@ export function liveBackend(cfg: LiveConfig): Backend {
       const { error } = await auth.signInWithPassword({ email, password });
       if (error) throw new UserFacingError("That email and password don't match a Mole account.");
     },
+    async sendEmailCode(email) {
+      const { error } = await auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+      if (!error) return;
+      if (error.status === 429 || /seconds|rate limit/i.test(error.message)) {
+        throw new UserFacingError('A code was sent a moment ago. Wait a minute before asking for another.', 'rate_limited');
+      }
+      if (/invalid/i.test(error.message)) throw new UserFacingError('That doesn’t look like an email address.');
+      throw new UserFacingError("The code didn't send. Check your connection and try again.");
+    },
+    async signInWithEmailCode(email, code) {
+      const { error } = await auth.verifyOtp({ email, token: code, type: 'email' });
+      if (error) throw new UserFacingError('That code isn’t right, or it has expired. Check the newest email, or ask for a new code.', 'bad_code');
+    },
     async signInWithGoogle() {
       const { error } = await auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
       if (error) throw new UserFacingError("Google sign-in didn't start. Try again.");

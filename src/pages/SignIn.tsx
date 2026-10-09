@@ -1,7 +1,7 @@
 // Sign in with a Mole account. There is no separate account for this product:
-// the same email and password, or the same Google, as the Mole app.
+// a code by email, Google, or a password, all Mole V3's own sign-in.
 
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { PRODUCT_NAME, PRODUCT_TAGLINE } from '../config/product.ts';
 import type { Backend } from '../data/backend.ts';
 import { Button, ErrorNote, Field } from '../ui/kit.tsx';
@@ -9,17 +9,64 @@ import { inputClass } from '../ui/styles.ts';
 import { Logo, SampleBanner } from '../ui/Shell.tsx';
 
 export function SignIn({ backend }: { backend: Backend }) {
+  // Sample mode asks for nothing. A form that accepted any password would
+  // teach people to type their real Mole password into a page that isn't Mole
+  // sign-in — and the sample build is public at sense.mole.is.
+  if (backend.mode === 'sample') return <SampleSignIn backend={backend} />;
+  return <LiveSignIn backend={backend} />;
+}
+
+function SampleSignIn({ backend }: { backend: Backend }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="min-h-screen bg-loop-ground">
+      <SampleBanner />
+      <div className="mx-auto flex max-w-md flex-col px-4 py-16">
+        <Logo />
+        <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">{PRODUCT_TAGLINE}</h1>
+        <p className="mt-2 text-sm text-fg-muted">
+          {PRODUCT_NAME} shows event organisers and exhibitors who came, who stopped at each booth, who stayed, and who
+          connected. This is a tour on made-up numbers; nothing to sign in to.
+        </p>
+        <Button className="mt-8 w-full" busy={busy} onClick={async () => {
+          setBusy(true);
+          try { await backend.signInWithGoogle(); } finally { setBusy(false); }
+        }}>
+          Explore the sample
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+const CODE = /^\d{6,10}$/;
+const RESEND_AFTER = 30;
+
+// The simple way in (roadmap 1.1): an email, then the code that arrives. No
+// password to make or forget, and no separate sign-up: Mole V3 makes the
+// account if there isn't one. Google stays; a password stays for people who
+// already have one.
+function LiveSignIn({ backend }: { backend: Backend }) {
+  const [step, setStep] = useState<'email' | 'code'>('email');
+  const [withPassword, setWithPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [busy, setBusy] = useState<'password' | 'google' | null>(null);
+  const [code, setCode] = useState('');
+  const [busy, setBusy] = useState<'send' | 'verify' | 'password' | 'google' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [wait, setWait] = useState(0);
 
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    setBusy('password');
+  useEffect(() => {
+    if (wait <= 0) return;
+    const t = setTimeout(() => setWait(w => w - 1), 1000);
+    return () => clearTimeout(t);
+  }, [wait]);
+
+  const run = async (what: NonNullable<typeof busy>, fn: () => Promise<void>) => {
+    setBusy(what);
     setError(null);
     try {
-      await backend.signInWithPassword(email.trim(), password);
+      await fn();
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -27,73 +74,92 @@ export function SignIn({ backend }: { backend: Backend }) {
     }
   };
 
-  // Sample mode asks for nothing. A form that accepted any password would
-  // teach people to type their real Mole password into a page that isn't Mole
-  // sign-in — and the sample build is public at sense.mole.is.
-  if (backend.mode === 'sample') {
-    return (
-      <div className="min-h-screen bg-loop-ground">
-        <SampleBanner />
-        <div className="mx-auto flex max-w-md flex-col px-4 py-16">
-          <Logo />
-          <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">{PRODUCT_TAGLINE}</h1>
-          <p className="mt-2 text-sm text-fg-muted">
-            {PRODUCT_NAME} shows event organisers and exhibitors who came, who stopped at each booth, who stayed, and who
-            connected. This is a tour on made-up numbers; nothing to sign in to.
-          </p>
-          <Button className="mt-8 w-full" busy={busy !== null} onClick={async () => {
-            setBusy('password');
-            try { await backend.signInWithGoogle(); } finally { setBusy(null); }
-          }}>
-            Explore the sample
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  const send = () => run('send', async () => {
+    await backend.sendEmailCode(email.trim());
+    setCode('');
+    setStep('code');
+    setWait(RESEND_AFTER);
+  });
+
+  const onEmail = (e: FormEvent) => {
+    e.preventDefault();
+    if (withPassword) void run('password', () => backend.signInWithPassword(email.trim(), password));
+    else void send();
+  };
+
+  const onCode = (e: FormEvent) => {
+    e.preventDefault();
+    const c = code.replace(/\s+/g, '');
+    if (!CODE.test(c)) { setError('The code is the 6 digits in the email.'); return; }
+    void run('verify', () => backend.signInWithEmailCode(email.trim(), c));
+  };
 
   return (
     <div className="min-h-screen bg-loop-ground">
       <div className="mx-auto flex max-w-md flex-col px-4 py-16">
         <Logo />
-        <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">Sign in with your Mole account</h1>
+        <h1 className="mt-10 text-[28px] font-black leading-tight tracking-tight text-ink">
+          {step === 'code' ? 'Check your email' : 'Sign in with your Mole account'}
+        </h1>
         <p className="mt-2 text-sm text-fg-muted">
-          {PRODUCT_TAGLINE} {PRODUCT_NAME} uses the same account as the Mole app, so there is nothing new to sign up for.
+          {step === 'code'
+            ? <>We sent a code to <span className="font-semibold text-ink">{email.trim()}</span>. Type it here to sign in. If it isn’t there, look in spam.</>
+            : <>{PRODUCT_TAGLINE} {PRODUCT_NAME} uses the same account as the Mole app. New to Mole? Type your email and we’ll make you one.</>}
         </p>
 
         <div className="mt-8 rounded-card border border-line bg-surface p-6 shadow-subtle">
-          <Button
-            tone="secondary"
-            className="w-full"
-            busy={busy === 'google'}
-            onClick={async () => {
-              setBusy('google');
-              setError(null);
-              try {
-                await backend.signInWithGoogle();
-              } catch (err) {
-                setError((err as Error).message);
-                setBusy(null);
-              }
-            }}
-          >
-            Continue with Google
-          </Button>
+          {step === 'code' ? (
+            <form onSubmit={onCode} className="space-y-4">
+              <Field label="Code">
+                <input
+                  className={`${inputClass} text-center text-lg font-semibold tracking-[0.3em]`}
+                  inputMode="numeric" autoComplete="one-time-code" maxLength={12} required autoFocus
+                  value={code} onChange={e => setCode(e.target.value)}
+                />
+              </Field>
+              {error && <ErrorNote error={error} />}
+              <Button type="submit" className="w-full" busy={busy === 'verify'}>Sign in</Button>
+              <div className="flex flex-wrap justify-between gap-2">
+                <Button type="button" tone="quiet" onClick={() => { setStep('email'); setError(null); }}>Use a different email</Button>
+                <Button type="button" tone="quiet" disabled={wait > 0} busy={busy === 'send'} onClick={() => void send()}>
+                  {wait > 0 ? `Send a new code (${wait}s)` : 'Send a new code'}
+                </Button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <form onSubmit={onEmail} className="space-y-4">
+                <Field label="Email">
+                  <input className={inputClass} type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} />
+                </Field>
+                {withPassword && (
+                  <Field label="Password">
+                    <input className={inputClass} type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} />
+                  </Field>
+                )}
+                {error && <ErrorNote error={error} />}
+                <Button type="submit" className="w-full" busy={busy === 'send' || busy === 'password'}>
+                  {withPassword ? 'Sign in' : 'Email me a code'}
+                </Button>
+                <Button type="button" tone="quiet" className="w-full" onClick={() => { setWithPassword(p => !p); setError(null); }}>
+                  {withPassword ? 'Email me a code instead' : 'Use my password instead'}
+                </Button>
+              </form>
 
-          <div className="my-6 flex items-center gap-3 text-xs text-fg-subtle">
-            <span className="h-px flex-1 bg-line" /> or with email <span className="h-px flex-1 bg-line" />
-          </div>
+              <div className="my-6 flex items-center gap-3 text-xs text-fg-subtle">
+                <span className="h-px flex-1 bg-line" /> or <span className="h-px flex-1 bg-line" />
+              </div>
 
-          <form onSubmit={submit} className="space-y-4">
-            <Field label="Email">
-              <input className={inputClass} type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} />
-            </Field>
-            <Field label="Password">
-              <input className={inputClass} type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} />
-            </Field>
-            {error && <ErrorNote error={error} />}
-            <Button type="submit" className="w-full" busy={busy === 'password'}>Sign in</Button>
-          </form>
+              <Button
+                tone="secondary"
+                className="w-full"
+                busy={busy === 'google'}
+                onClick={() => void run('google', () => backend.signInWithGoogle())}
+              >
+                Continue with Google
+              </Button>
+            </>
+          )}
         </div>
 
         <p className="mt-6 text-xs text-fg-muted">

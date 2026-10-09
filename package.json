@@ -12,7 +12,7 @@
     "preview": "vite preview --port 4173",
     "start": "node scripts/serve-static.mjs dist",
     "test:db": "node tests/db/run.mjs",
-    "test:e2e": "VITE_SAMPLE_DATA=true vite build && node tests/e2e/run.mjs",
+    "test:e2e": "VITE_SAMPLE_DATA=true vite build && node tests/e2e/run.mjs && node tests/e2e/live.mjs",
     "audit:secrets": "node scripts/audit-secrets.mjs dist",
     "budget": "node scripts/check-bundle-budget.mjs dist",
     "check": "npm run typecheck && npm run lint && npm test && npm run build && npm run budget && npm run audit:secrets",
