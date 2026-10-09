@@ -23,6 +23,7 @@ D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 | ~~**D-2**~~ | What is Mole Sense in the product family? | **Purple, green and yellow**, each with one job (D25). Recorded in sunny-kit as the Mole Sense surface. |
 | ~~**D-3**~~ | The funnel's purple-to-yellow stream was a fourth gradient | **My recommendation:** purple alone; yellow is the glow behind Sunny (D26). |
 | ~~**D-4**~~ | Sunny and the funnel on a dark panel | **The white die-cut and the glow**, now a sunny-kit rule; the panel is `loop-navy` (D27). |
+| **D-6** | **May an organiser create their own Loop organisation, free, from Mole Sense?** (roadmap 1.2, and 1.3 after it.) Mole V3 already has the function (`create_loop_account`, a FREE organisation with the caller as admin), but it is deliberately unused: V3 parks it as *"needs the pricing page before a customer can create their own"*. Today only Mole staff create organisations. | Without it, a new organiser signs in and sees no events, and has to ask you. With it, Mole Sense opens self-serve Loop sign-up before the pricing page. | **Yes, for drafts.** Let Sense create the organisation and draft events through new `api_v1_*` functions in V3. V3 already stops a draft being published without the Events entitlement, so nothing goes public unpaid. Invitations (1.3) follow: V3's code-by-email invite, sent from Sense. |
 | **D-5** | **What organisers pay for, and how much** | Phases 5–6 depend on it | See `DECISIONS.md`, the last section. |
 
 ---
@@ -58,7 +59,7 @@ D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 |---|---|---|
 | **W-14** | The backend has never been deployed, migration 119 hasn't run, and the V3 branch isn't merged | `YOUR_TURN.md` steps 1–5, then a pull request in Mole V3 |
 | **W-15** | The PLExyz connection is built on assumptions | reka.re's API docs (`YOUR_TURN` step 8) |
-| **W-16** | Nothing tells us when it breaks: no error tracking, no uptime check | Sentry and an uptime check on `/api/health` |
+| **W-16** | **Partly fixed 9 Oct:** GitHub checks the site every half hour and emails on failure; the backend's health joins once `HEALTH_URL` is set (`YOUR_TURN` 5). Error tracking (Sentry) still to come. Nothing told us when it broke: no error tracking, no uptime check | Sentry and an uptime check on `/api/health` |
 
 ### Sign-in and access
 
@@ -87,8 +88,8 @@ working the way this repo has been built so far.
 | # | What | Done when |
 |---|---|---|
 | ~~**1.1**~~ | **Done 9 Oct**, live once `YOUR_TURN` 7b adds the code to Mole's emails. **Sign in with an email code.** Type your email and get a 6-digit code; no password. It creates the Mole account if there isn't one. Google stays. Uses Mole V3's own sign-in, so it's still one Mole account. | Someone with no Mole account is looking at their events within a minute |
-| **1.2** | **First-run setup.** A new organiser names their organisation and first event in two screens (creates the Loop organisation in Mole V3 through a new `api_v1` function) | A brand-new organiser reaches "add your first zone" with no help |
-| **1.3** | **Invitations.** Invite a teammate by email; they get a link and a code | An invited teammate sees the event, and nothing else |
+| **1.2** | *Waiting on D-6.* **First-run setup.** A new organiser names their organisation and first event in two screens (creates the Loop organisation in Mole V3 through a new `api_v1` function) | A brand-new organiser reaches "add your first zone" with no help |
+| **1.3** | *Waiting on D-6.* **Invitations.** Invite a teammate by email; they get a link and a code | An invited teammate sees the event, and nothing else |
 | **1.4** | **Go live:** W-14, W-16, real-data deploy | sense.mole.is shows real events; the health page is green |
 | ~~**1.5**~~ | **Brand pass. Done 9 Oct:** W-1 to W-8 and D-1 to D-4 | A screen-by-screen check against the kit passes |
 | ~~**1.6**~~ | **Staff don't count** (W-9). **Done 9 Oct:** the 3-hour rule, in both copies of the arithmetic | A test stand with staff phones shows only the visitors |
@@ -149,6 +150,7 @@ working the way this repo has been built so far.
 ## 3 · What I need from you, in order
 
 1. ~~**D-1 to D-4**~~: decided 8 Oct, and built.
+1. **D-6**: may organisers create their own organisation from Mole Sense? Unblocks 1.2 and 1.3.
 2. `YOUR_TURN.md` steps 1–5, so Phase 1 can go live.
 3. **reka.re**: their API, and the answers to W-10 and W-11 (signal strength, range, address randomisation).
 4. **One friendly organiser and one exhibitor** for the first real event. W-9 and W-11 can only be checked against a real crowd and a hand count.

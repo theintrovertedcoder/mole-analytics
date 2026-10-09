@@ -90,7 +90,15 @@ Leave the three `PLEXYZ_…` settings for step 8.
 - `"moleV3":false`: `MOLE_SUPABASE_URL` or `MOLE_SUPABASE_ANON_KEY` is wrong. Copy them again from the links above.
 - A "not found" page: the functions aren't deployed. Run step 4 again.
 
-→ **Done when:** the health page shows `"ok":true`.
+**Then let the uptime check watch it** (30 seconds). GitHub already checks
+sense.mole.is every half hour and emails you if it's down. To have it check the
+backend too, add a variable named **`HEALTH_URL`** with the health address above
+as its value:
+**https://github.com/theintrovertedcoder/mole-analytics/settings/variables/actions/new**
+
+→ **Done when:** the health page shows `"ok":true`, and the variable is saved.
+The next run here says "and the backend is healthy":
+**https://github.com/theintrovertedcoder/mole-analytics/actions/workflows/uptime.yml**
 
 ## ~~☐ 6 · Put the app online~~ · **done, 8 Oct**
 
