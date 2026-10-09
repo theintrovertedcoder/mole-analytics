@@ -9,6 +9,7 @@ import type { Backend } from '../data/backend.ts';
 import { formatAgo } from '../domain/format.ts';
 import { Link } from '../lib/Link.tsx';
 import { useAsync } from '../lib/useAsync.ts';
+import { useConfirm } from '../ui/ConfirmDialog.tsx';
 import { Button, EmptyState, ErrorNote, Pill, Spinner } from '../ui/kit.tsx';
 import { buttonClass } from '../ui/styles.ts';
 
@@ -36,6 +37,7 @@ function Battery({ level }: { level: number | null }) {
 function DeviceRow({ device, backend, onChange }: { device: Device; backend: Backend; onChange: () => void }) {
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [dialog, ask] = useConfirm();
   const act = async (fn: () => Promise<unknown>) => {
     setBusy(true);
     setNote(null);
@@ -51,6 +53,7 @@ function DeviceRow({ device, backend, onChange }: { device: Device; backend: Bac
 
   return (
     <li className="rounded-panel border border-line bg-surface p-4">
+      {dialog}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <div className="flex h-10 w-10 items-center justify-center rounded-chip bg-purple-tint text-purple-text"><Radio className="h-5 w-5" aria-hidden /></div>
         <div className="min-w-0 flex-1">
@@ -74,8 +77,8 @@ function DeviceRow({ device, backend, onChange }: { device: Device; backend: Bac
           {(device.status === 'active' || device.status === 'pending_approval') && (
             <Button
               tone="danger" busy={busy}
-              onClick={() => {
-                if (!confirm(`Unpair “${device.label}”? It stops counting at once. What it already counted stays in your reports.`)) return;
+              onClick={async () => {
+                if (!await ask({ title: `Unpair “${device.label}”?`, body: 'It stops counting at once. What it already counted stays in your reports.', confirm: 'Unpair' })) return;
                 act(async () => {
                   const r = await backend.unpairDevice(device.id);
                   if (!r.plexyzConfirmed) setNote('Unpaired here. PLExyz didn’t confirm, so it may still show as paired there; nothing it sends is counted.');
@@ -125,7 +128,7 @@ export function SensorsPage({ backend, orgId }: { backend: Backend; orgId: strin
       </div>
 
       {current.length === 0 ? (
-        <EmptyState icon={<Radio className="h-6 w-6" />} title="No sensors paired yet"
+        <EmptyState mood="thinking" title="No sensors paired yet"
           action={<Link to={`/orgs/${orgId}/sensors/pair`} className={buttonClass()}>Pair your first sensor</Link>}>
           A PLExyz sensor counts the phones near it — never who they belong to. Scan the QR on the sensor to ask for it; its
           owner allows the request in the PLExyz dashboard, and it starts counting.
@@ -154,7 +157,7 @@ export function SensorsIndex({ backend }: { backend: Backend }) {
     <div className="mx-auto max-w-3xl">
       <h1 className="mb-6 text-[28px] font-black tracking-tight text-ink">Sensors</h1>
       {list.length === 0 ? (
-        <EmptyState icon={<Building2 className="h-6 w-6" />} title="No organisation to pair sensors for">
+        <EmptyState mood="thinking" title="No organisation to pair sensors for">
           Sensors belong to a Loop organisation. You need to be an owner or admin of one, with events in your scope.
         </EmptyState>
       ) : (

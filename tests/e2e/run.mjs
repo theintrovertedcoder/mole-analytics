@@ -39,6 +39,26 @@ async function axe(page, where) {
     .filter(v => v.impact === 'serious' || v.impact === 'critical')
     .map(v => `${v.id}: ${v.nodes.slice(0, 2).map(n => n.target.join(' ')).join(' | ')}`));
   if (res.length) throw new Error(`accessibility, on ${where}:\n      ${res.join('\n      ')}`);
+  await tapTargets(page, where);
+}
+
+// The brand book: every tap target at least 44 × 44px (W-3). Inline links in a
+// sentence are exempt, as WCAG 2.5.8 exempts them; everything else is measured.
+async function tapTargets(page, where) {
+  const small = await page.evaluate(() => [...document.querySelectorAll('button, a[href], select, input:not([type=hidden]), [role=button]')]
+    .filter(el => {
+      const r = el.getBoundingClientRect();
+      if (r.width <= 1 || r.height <= 1) return false;            // sr-only or hidden
+      if (getComputedStyle(el).visibility === 'hidden') return false;
+      if (getComputedStyle(el).display === 'inline') return false; // a link inside a sentence
+      return Math.round(r.width) < 44 || Math.round(r.height) < 44;
+    })
+    .map(el => {
+      const r = el.getBoundingClientRect();
+      const name = (el.getAttribute('aria-label') || el.textContent || el.getAttribute('type') || el.tagName).trim().slice(0, 40);
+      return `${el.tagName.toLowerCase()} "${name}" is ${Math.round(r.width)}×${Math.round(r.height)}`;
+    }));
+  if (small.length) throw new Error(`tap targets under 44px, on ${where}:\n      ${small.join('\n      ')}`);
 }
 
 async function journey(name, fn, viewport = { width: 1280, height: 900 }) {
@@ -156,6 +176,28 @@ await journey('an event with no sensors says how to start, not zeros', async pag
   await expectText(page, 'Counts everyone at the event');
   await page.getByRole('listitem').filter({ hasText: 'Main room' }).waitFor();
   await axe(page, 'zones and sensors');
+
+  // Deleting asks in a Mole dialog, not the browser's confirm() (W-7).
+  const boxes = [];
+  page.on('dialog', d => { boxes.push(`${d.type()}: ${d.message()}`); d.dismiss().catch(() => {}); });
+  const del = page.getByRole('button', { name: 'Delete Main room' });
+  const asked = page.getByRole('dialog', { name: 'Delete “Main room”?' });
+  await del.click();
+  await asked.waitFor({ timeout: 3000 }).catch(() => {
+    throw new Error(boxes.length ? `the browser's own box opened instead of a Mole dialog: ${boxes[0]}` : 'no dialog opened');
+  });
+  const focused = await page.evaluate(() => document.activeElement?.textContent);
+  if (focused !== 'Cancel') throw new Error(`the dialog opened with "${focused}" focused, not Cancel`);
+  await axe(page, 'the delete dialog');
+  await asked.getByRole('button', { name: 'Cancel' }).click();
+  await asked.waitFor({ state: 'detached' });
+  await del.click();
+  await page.keyboard.press('Escape');
+  await asked.waitFor({ state: 'detached' });
+  await page.getByRole('listitem').filter({ hasText: 'Main room' }).waitFor();
+  await del.click();
+  await asked.getByRole('button', { name: 'Delete zone' }).click();
+  await page.getByRole('listitem').filter({ hasText: 'Main room' }).waitFor({ state: 'detached' });
 });
 
 await journey('pairing a sensor: scan or type, wait for the owner, paired', async page => {

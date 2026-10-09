@@ -119,7 +119,7 @@ export function TrafficChart({ buckets, label }: { buckets: TrafficBucket[]; lab
           </div>
         )}
       </div>
-      <button type="button" className="mt-2 text-xs font-semibold text-purple-text hover:underline" onClick={() => setTable(t => !t)} aria-expanded={table}>
+      <button type="button" className="mt-1 inline-flex min-h-11 items-center text-xs font-semibold text-purple-text hover:underline" onClick={() => setTable(t => !t)} aria-expanded={table}>
         {table ? 'Hide the table' : 'Show as a table'}
       </button>
       {table && (

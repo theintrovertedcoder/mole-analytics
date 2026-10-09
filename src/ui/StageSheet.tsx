@@ -67,7 +67,7 @@ export function StageSheet({ stage, onClose }: { stage: Stage | null; onClose: (
             <h2 id="stage-sheet-title" className="text-xl font-extrabold tracking-tight text-ink">{shown.label}</h2>
             <p className="mt-1 text-sm text-fg-muted">What this number is</p>
           </div>
-          <button ref={closeBtn} onClick={onClose} aria-label="Close" className="rounded-full bg-surface-3 p-2 text-fg-muted hover:text-ink">
+          <button ref={closeBtn} onClick={onClose} aria-label="Close" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface-3 text-fg-muted hover:text-ink">
             <X className="h-5 w-5" aria-hidden />
           </button>
         </div>

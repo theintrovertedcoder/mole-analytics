@@ -35,12 +35,12 @@ D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 |---|---|---|
 | ~~**W-1**~~ | **Fixed 8 Oct.** `mole-logo.svg` and `mole-badge.svg` are V3's copies, not byte-identical to sunny-kit's canonical files | Copy `sunny-kit/brand/logos/` over them; add a test that they match |
 | ~~**W-2**~~ | **Fixed 8 Oct.** The header put the badge beside "Mole Sense" in bold, which reads as a product logo. The brand says products have no logos and are named by the word | Mole logo, then "Sense" in `micro` caps, then the organisation's name, as Loop's dashboard does |
-| **W-3** | Some tap targets are under 44 × 44px: the funnel's ⓘ buttons, rename/delete on zones, the sheet's close button | Grow the hit areas |
-| **W-4** | Status pills ("Reporting", "Waiting for approval", "Not allowed") are colour and word with no icon. The book wants an icon too, because success and Loop share one green | Add the icons |
+| ~~**W-3**~~ | **Fixed 9 Oct.** Every control is at least 44px, and `tests/e2e` now measures every button, link and input on every page it visits (it found 20 more than this row listed). Some tap targets are under 44 × 44px: the funnel's ⓘ buttons, rename/delete on zones, the sheet's close button | Grow the hit areas |
+| ~~**W-4**~~ | **Fixed 9 Oct.** Status pills ("Reporting", "Waiting for approval", "Not allowed") are colour and word with no icon. The book wants an icon too, because success and Loop share one green | Add the icons |
 | ~~**W-5**~~ | **Fixed 8 Oct.** Motion outside the three brand durations: the ribbon morph (650ms), the goal bar (700ms) | 300ms, the *enter* curve |
-| **W-6** | Waiting and empty states use a spinner or an icon, not Sunny | Sunny's `loading`, `thinking`, `sleeping` and `404` moods, on a `brand-yellow-tint` disc |
-| **W-7** | Deleting and unpairing use the browser's own `confirm()` box | A proper Mole dialog on `z-modal` |
-| **W-8** | `neutral-fg-subtle` is used on the page background (the funnel's footnote, the insights footer); the book allows it on white surfaces only, and wants placeholders in `neutral-fg-disabled` | `neutral-fg-muted` on the page; placeholders as the book says |
+| ~~**W-6**~~ | **Fixed 9 Oct.** Thinking, sad and 404 moods on a yellow-tint disc; loading after a second. Waiting and empty states use a spinner or an icon, not Sunny | Sunny's `loading`, `thinking`, `sleeping` and `404` moods, on a `brand-yellow-tint` disc |
+| ~~**W-7**~~ | **Fixed 9 Oct.** A native `<dialog>`, Cancel focused first; the zones journey tests Cancel, Escape and Delete. Deleting and unpairing use the browser's own `confirm()` box | A proper Mole dialog on `z-modal` |
+| ~~**W-8**~~ | **Fixed 9 Oct.** `neutral-fg-subtle` is used on the page background (the funnel's footnote, the insights footer); the book allows it on white surfaces only, and wants placeholders in `neutral-fg-disabled` | `neutral-fg-muted` on the page; placeholders as the book says |
 
 ### Data: the numbers could be wrong
 
@@ -90,7 +90,7 @@ working the way this repo has been built so far.
 | **1.2** | **First-run setup.** A new organiser names their organisation and first event in two screens (creates the Loop organisation in Mole V3 through a new `api_v1` function) | A brand-new organiser reaches "add your first zone" with no help |
 | **1.3** | **Invitations.** Invite a teammate by email; they get a link and a code | An invited teammate sees the event, and nothing else |
 | **1.4** | **Go live:** W-14, W-16, real-data deploy | sense.mole.is shows real events; the health page is green |
-| **1.5** | **Brand pass:** W-3, W-4, W-6 to W-8 (W-1, W-2, W-5 and D-1 to D-4 are done) | A screen-by-screen check against the kit passes |
+| ~~**1.5**~~ | **Brand pass. Done 9 Oct:** W-1 to W-8 and D-1 to D-4 | A screen-by-screen check against the kit passes |
 | ~~**1.6**~~ | **Staff don't count** (W-9). **Done 9 Oct:** the 3-hour rule, in both copies of the arithmetic | A test stand with staff phones shows only the visitors |
 
 ### Phase 2 · Floor plans, booths, sensors, logos · ~3 weeks

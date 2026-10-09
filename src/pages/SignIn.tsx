@@ -96,7 +96,7 @@ export function SignIn({ backend }: { backend: Backend }) {
           </form>
         </div>
 
-        <p className="mt-6 text-xs text-fg-subtle">
+        <p className="mt-6 text-xs text-fg-muted">
           You will see the events of the Loop organisations you run in Mole, and any event you have been made an editor of.
         </p>
       </div>

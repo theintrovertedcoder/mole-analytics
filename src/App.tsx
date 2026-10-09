@@ -23,7 +23,7 @@ function Routes({ backend, path }: { backend: Backend; path: string }) {
   if ((p = match('/orgs/:org/sensors/pair', path))) return <PairSensor backend={backend} orgId={p.org!} />;
   if ((p = match('/orgs/:org/sensors', path))) return <SensorsPage backend={backend} orgId={p.org!} />;
   return (
-    <EmptyState icon={<span aria-hidden>?</span>} title="Nothing at this address">
+    <EmptyState mood="404" title="Nothing at this address">
       The link may be old. Your events are on the first page.
     </EmptyState>
   );

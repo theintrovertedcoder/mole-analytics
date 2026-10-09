@@ -7,7 +7,7 @@
 // The view lives in the URL — zone, window, threshold, percentages — so a link
 // to "Booth A12, day 2, 5 minutes" opens exactly that.
 
-import { ArrowLeft, Clock, Lightbulb, MapPin, Settings2, Sparkles, Target, Users } from 'lucide-react';
+import { ArrowLeft, Clock, Lightbulb, Settings2, Sparkles, Target, Users } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import type { EventOutcomes, MoleEvent, Zone } from '../../supabase/functions/_shared/contract.ts';
 import { clampThreshold, THRESHOLD_DEFAULT, THRESHOLD_MAX, THRESHOLD_MIN } from '../../supabase/functions/_shared/presence.ts';
@@ -83,7 +83,7 @@ function Header({ event }: { event: MoleEvent }) {
   const exhibitor = event.package === 'EXHIBITOR';
   return (
     <header className="pb-6">
-      <Link to="/" className="mb-5 inline-flex items-center gap-1 text-sm font-semibold text-fg-muted hover:text-ink">
+      <Link to="/" className="mb-3 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-fg-muted hover:text-ink">
         <ArrowLeft className="h-4 w-4" aria-hidden /> Your events
       </Link>
       <div className="mb-2">{exhibitor ? <Pill tone="events">Exhibitor view</Pill> : <Pill tone="purple">Organiser view</Pill>}</div>
@@ -120,7 +120,7 @@ function Segmented<T extends string>({ value, options, onChange, label }: {
           role="radio"
           aria-checked={value === v}
           onClick={() => onChange(v)}
-          className={`flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition-all
+          className={`min-h-11 flex-1 rounded-chip px-3 text-xs font-semibold transition-all
             ${value === v ? 'bg-surface text-ink shadow-subtle' : 'text-fg-muted hover:text-ink'}`}
         >
           {text}
@@ -151,7 +151,7 @@ function Insights({ items }: { items: Insight[] }) {
           ))}
         </ul>
       )}
-      <p className="mt-4 text-center text-[11px] text-fg-subtle">Counted by PLExyz sensors · connections from Mole</p>
+      <p className="mt-4 text-center text-[11px] text-fg-muted">Counted by PLExyz sensors · connections from Mole</p>
     </section>
   );
 }
@@ -238,7 +238,7 @@ export function EventDashboard({ backend, eventId }: { backend: Backend; eventId
   const { zones, outcomes } = base.data!;
   if (!event) {
     return (
-      <EmptyState icon={<MapPin className="h-6 w-6" />} title="This event isn’t yours to see" action={<Link to="/" className="font-semibold text-purple-text underline">Back to your events</Link>}>
+      <EmptyState mood="sad" title="This event isn’t yours to see" action={<Link to="/" className="font-semibold text-purple-text underline">Back to your events</Link>}>
         Either it doesn’t exist, or you aren’t an admin of its organisation or an editor of the event in Mole.
       </EmptyState>
     );
@@ -255,7 +255,7 @@ export function EventDashboard({ backend, eventId }: { backend: Backend; eventId
         <aside className="lg:col-span-4"><Header event={event} /></aside>
         <main className="space-y-6 lg:col-span-8 lg:pt-6">
           <EmptyState
-            icon={<MapPin className="h-6 w-6" />}
+            mood="thinking"
             title="No zones yet, so nothing to count"
             action={<Link to={`/events/${event.id}/setup`} className={buttonClass()}>Set up zones and sensors</Link>}
           >
@@ -311,7 +311,7 @@ export function EventDashboard({ backend, eventId }: { backend: Backend; eventId
           type="range" min={THRESHOLD_MIN} max={THRESHOLD_MAX} step={0.5} value={draft}
           onChange={e => setDraft(Number(e.target.value))}
           onPointerUp={commitThreshold} onKeyUp={commitThreshold} onBlur={commitThreshold}
-          className="w-full accent-[var(--brand-purple)]"
+          className="h-11 w-full cursor-pointer accent-[var(--brand-purple)]"
           aria-describedby="threshold-help"
         />
         <span id="threshold-help" className="mt-1 flex justify-between text-[11px] text-fg-subtle">

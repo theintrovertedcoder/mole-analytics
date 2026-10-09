@@ -45,7 +45,7 @@ export function EventsPage({ backend }: { backend: Backend }) {
 
   if (list.length === 0) {
     return (
-      <EmptyState icon={<CalendarDays className="h-6 w-6" />} title="No events yet">
+      <EmptyState mood="thinking" title="No events yet">
         Events come from Mole. Create one in your Loop dashboard (Events), or ask the owner of your organisation to make you
         an admin or an editor of theirs. It will appear here.
       </EmptyState>

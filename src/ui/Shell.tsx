@@ -43,7 +43,7 @@ export function Shell({ account, orgs, sample, path, onSignOut, children }: {
     <Link
       to={to}
       aria-current={active ? 'page' : undefined}
-      className={`inline-flex items-center gap-1.5 rounded-chip px-3 py-2 text-sm font-semibold transition-colors
+      className={`inline-flex min-h-11 items-center gap-1.5 rounded-chip px-3 text-sm font-semibold transition-colors
         ${active ? 'bg-loop-tint text-ink' : 'text-fg-muted hover:bg-surface-3 hover:text-ink'}`}
     >
       {icon}
@@ -57,7 +57,7 @@ export function Shell({ account, orgs, sample, path, onSignOut, children }: {
       {sample && <SampleBanner />}
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
-          <Link to="/" className="rounded-chip focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple">
+          <Link to="/" className="inline-flex min-h-11 items-center rounded-chip focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple">
             <Logo />
           </Link>
           {orgs.length === 1 && (
@@ -69,7 +69,7 @@ export function Shell({ account, orgs, sample, path, onSignOut, children }: {
           </nav>
           <div className="ml-auto flex items-center gap-3 text-sm">
             {account?.email && <span className="hidden text-fg-muted sm:inline">{account.email}</span>}
-            <button onClick={onSignOut} className="inline-flex items-center gap-1.5 rounded-chip px-3 py-2 font-semibold text-fg-muted hover:bg-surface-3 hover:text-ink">
+            <button onClick={onSignOut} className="inline-flex min-h-11 items-center gap-1.5 rounded-chip px-3 font-semibold text-fg-muted hover:bg-surface-3 hover:text-ink">
               <LogOut className="h-4 w-4" aria-hidden /> Sign out
             </button>
           </div>

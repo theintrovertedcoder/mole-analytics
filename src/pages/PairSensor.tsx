@@ -181,7 +181,7 @@ export function PairSensor({ backend, orgId }: { backend: Backend; orgId: string
 
   return (
     <div className="mx-auto max-w-lg">
-      <Link to={backTo} className="mb-4 inline-flex text-sm font-semibold text-fg-muted hover:text-ink">← Back</Link>
+      <Link to={backTo} className="mb-2 inline-flex min-h-11 items-center text-sm font-semibold text-fg-muted hover:text-ink">← Back</Link>
       <h1 className="text-[28px] font-black tracking-tight text-ink">Pair a sensor</h1>
       <p className="mt-1 text-sm text-fg-muted">Scan the QR on the PLExyz sensor, or type the code printed under it.</p>
 
@@ -205,7 +205,7 @@ export function PairSensor({ backend, orgId }: { backend: Backend; orgId: string
           <Button type="submit" className="w-full" busy={busy}><Radio className="h-4 w-4" aria-hidden /> Ask PLExyz to pair it</Button>
         </form>
       </Card>
-      <p className="mt-4 text-xs text-fg-subtle">
+      <p className="mt-4 text-xs text-fg-muted">
         A sensor counts nearby phones as anonymous visits. Mole never stores what the sensor saw, only a scrambled key that
         can’t be traced back to a phone or matched across events.
       </p>

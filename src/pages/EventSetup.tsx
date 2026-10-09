@@ -8,6 +8,7 @@ import type { Device, Zone, ZoneKind } from '../../supabase/functions/_shared/co
 import type { Backend } from '../data/backend.ts';
 import { Link } from '../lib/Link.tsx';
 import { useAsync } from '../lib/useAsync.ts';
+import { useConfirm } from '../ui/ConfirmDialog.tsx';
 import { Button, Card, ErrorNote, Field, Pill, Spinner } from '../ui/kit.tsx';
 import { buttonClass, inputClass } from '../ui/styles.ts';
 import { DeviceStatusPill } from './SensorsPage.tsx';
@@ -21,6 +22,7 @@ function ZoneRow({ zone, devices, spare, backend, onChange }: {
   const [name, setName] = useState(zone.name);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dialog, ask] = useConfirm();
 
   const act = async (fn: () => Promise<unknown>) => {
     setBusy(true);
@@ -37,6 +39,7 @@ function ZoneRow({ zone, devices, spare, backend, onChange }: {
 
   return (
     <li className="rounded-panel border border-line bg-surface p-4">
+      {dialog}
       <div className="flex flex-wrap items-center gap-3">
         {editing ? (
           <form
@@ -56,13 +59,15 @@ function ZoneRow({ zone, devices, spare, backend, onChange }: {
               </div>
               <p className="mt-0.5 text-xs text-fg-subtle">{KIND_TEXT[zone.kind].feeds}</p>
             </div>
-            <button className="rounded-full p-2 text-fg-subtle hover:bg-surface-3 hover:text-ink" aria-label={`Rename ${zone.name}`} onClick={() => setEditing(true)}>
+            <button className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-fg-muted hover:bg-surface-3 hover:text-ink" aria-label={`Rename ${zone.name}`} onClick={() => setEditing(true)}>
               <Pencil className="h-4 w-4" aria-hidden />
             </button>
             <button
-              className="rounded-full p-2 text-fg-subtle hover:bg-bad-tint hover:text-bad-text"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-fg-muted hover:bg-bad-tint hover:text-bad-text"
               aria-label={`Delete ${zone.name}`}
-              onClick={() => { if (confirm(`Delete “${zone.name}”? Sensors in it are moved out, not unpaired.`)) act(() => backend.deleteZone(zone.id)); }}
+              onClick={async () => {
+                if (await ask({ title: `Delete “${zone.name}”?`, body: 'Sensors in it are moved out, not unpaired. A zone with visits already counted can’t be deleted, only renamed.', confirm: 'Delete zone' })) act(() => backend.deleteZone(zone.id));
+              }}
             >
               <Trash2 className="h-4 w-4" aria-hidden />
             </button>
@@ -73,18 +78,18 @@ function ZoneRow({ zone, devices, spare, backend, onChange }: {
       <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-line pt-3">
         {devices.length === 0 && <span className="text-xs text-fg-muted">No sensor here yet, so this zone counts nothing.</span>}
         {devices.map(d => (
-          <span key={d.id} className="inline-flex items-center gap-2 rounded-full bg-surface-2 py-1 pl-3 pr-1 text-xs">
+          <span key={d.id} className="inline-flex items-center gap-2 rounded-full bg-surface-2 pl-3 text-xs">
             <Radio className="h-3.5 w-3.5 text-purple-text" aria-hidden />
             <span className="font-semibold text-ink">{d.label}</span>
             <DeviceStatusPill device={d} />
-            <button className="rounded-full px-2 py-0.5 text-fg-muted hover:bg-surface-3 hover:text-ink" onClick={() => act(() => backend.updateDevice(d.id, { zoneId: null }))}>
+            <button className="min-h-11 rounded-full px-3 font-semibold text-fg-muted hover:bg-surface-3 hover:text-ink" onClick={() => act(() => backend.updateDevice(d.id, { zoneId: null }))}>
               Take out
             </button>
           </span>
         ))}
         {spare.length > 0 && (
           <select
-            className="rounded-full border border-line-strong bg-surface px-3 py-1 text-xs font-semibold text-purple-text"
+            className="min-h-11 rounded-full border border-line-strong bg-surface px-3 text-xs font-semibold text-purple-text"
             value=""
             disabled={busy}
             aria-label={`Put a sensor in ${zone.name}`}
@@ -139,7 +144,7 @@ export function EventSetup({ backend, eventId }: { backend: Backend; eventId: st
 
   return (
     <div className="mx-auto max-w-3xl">
-      <Link to={`/events/${eventId}`} className="mb-4 inline-flex items-center gap-1 text-sm font-semibold text-fg-muted hover:text-ink">
+      <Link to={`/events/${eventId}`} className="mb-2 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-fg-muted hover:text-ink">
         <ArrowLeft className="h-4 w-4" aria-hidden /> {event.title}
       </Link>
       <h1 className="text-[28px] font-black tracking-tight text-ink">Zones and sensors</h1>

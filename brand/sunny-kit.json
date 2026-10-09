@@ -58,6 +58,22 @@
     "public/brand/sunny-delighted.svg": {
       "kit": "brand/sunny/delighted.svg",
       "sha256": "7bd63f2a2ed7775762d39895ea3475d56d48f972cbfb9a55559f033de27c4ff7"
+    },
+    "public/brand/sunny-loading.svg": {
+      "kit": "brand/sunny/loading.svg",
+      "sha256": "34ac3a0e7d96351a40ca8be5055a654ae52cc1ea8ad24693c50dcc7b073d7259"
+    },
+    "public/brand/sunny-thinking.svg": {
+      "kit": "brand/sunny/thinking.svg",
+      "sha256": "ffd6c001375a85f6c6f30869bfb217debb62438980830b310b1818b1a7c53526"
+    },
+    "public/brand/sunny-sad.svg": {
+      "kit": "brand/sunny/sad.svg",
+      "sha256": "2fbc4b566bfe6e682b2be287deeea0f98380cade97bce223625e59fe52ad3ddb"
+    },
+    "public/brand/sunny-404.svg": {
+      "kit": "brand/sunny/404.svg",
+      "sha256": "2f78b63f8c8da930856185b3b9a330cde8156a2b08962d76c3d149f9b541a8c8"
     }
   }
 }

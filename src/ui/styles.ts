@@ -9,7 +9,8 @@ export const BUTTON: Record<Tone, string> = {
   danger: 'bg-surface text-bad-text border border-bad-border hover:bg-bad-tint',
 };
 
-export const BUTTON_BASE = `inline-flex items-center justify-center gap-2 rounded-chip px-4 py-2.5 text-sm font-semibold
+// min-h-11: the brand book's 44px tap target (W-3; tests/e2e measures every page).
+export const BUTTON_BASE = `inline-flex min-h-11 items-center justify-center gap-2 rounded-chip px-4 py-2.5 text-sm font-semibold
         transition-colors duration-normal disabled:cursor-not-allowed disabled:opacity-60
         focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple`;
 
@@ -17,5 +18,5 @@ export const BUTTON_BASE = `inline-flex items-center justify-center gap-2 rounde
 export const buttonClass = (tone: Tone = 'primary') => `${BUTTON_BASE} ${BUTTON[tone]}`;
 
 export const inputClass =
-  'w-full rounded-chip border border-line-strong bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-fg-subtle '
+  'min-h-11 w-full rounded-chip border border-line-strong bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-fg-disabled '
   + 'focus:border-purple focus:outline-none focus:ring-2 focus:ring-purple-tint';

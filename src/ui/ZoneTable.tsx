@@ -25,7 +25,7 @@ export function ZoneTable({ stats, zones, onFocus }: { stats: ZoneStats[]; zones
           {stats.map(s => (
             <tr key={s.zoneId} className="border-b border-line last:border-0">
               <td className="px-5 py-2.5 sm:px-3">
-                <button className="text-left font-semibold text-ink hover:text-purple-text hover:underline" onClick={() => onFocus(s.zoneId)}>
+                <button className="min-h-11 text-left font-semibold text-ink hover:text-purple-text hover:underline" onClick={() => onFocus(s.zoneId)}>
                   {name(s.zoneId)}
                 </button>
               </td>
