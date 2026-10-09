@@ -1,0 +1,32 @@
+[
+  {
+    "file": "confirm-signup.html",
+    "supabase": "Confirm signup",
+    "subject": "Welcome to Mole: confirm your email"
+  },
+  {
+    "file": "magic-link-or-otp.html",
+    "supabase": "Magic link or OTP",
+    "subject": "Your Mole sign-in code"
+  },
+  {
+    "file": "invite-user.html",
+    "supabase": "Invite user",
+    "subject": "You are invited to Mole"
+  },
+  {
+    "file": "reset-password.html",
+    "supabase": "Reset password",
+    "subject": "Reset your Mole password"
+  },
+  {
+    "file": "change-email-address.html",
+    "supabase": "Change email address",
+    "subject": "Confirm your new Mole email address"
+  },
+  {
+    "file": "reauthentication.html",
+    "supabase": "Reauthentication",
+    "subject": "Your Mole confirmation code"
+  }
+]

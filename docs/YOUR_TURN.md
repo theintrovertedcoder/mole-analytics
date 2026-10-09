@@ -133,12 +133,13 @@ Only add to that list. **Don't change the Site URL.**
 → **Done when:** "Continue with Google" on sense.mole.is lands you on **Your
 events**, showing your Loop org's events.
 
-## ☐ 7b · Put the sign-in code in Mole's emails · 15 minutes
+## ☐ 7b · Mole's emails: the sign-in code, and a friendlier look · 20 minutes
 
 Needed once the site is on real data. Mole Sense now signs people in with a
 6-digit code from their email (no password to make or forget), using Mole V3's
-own sign-in. Mole's emails don't print a code yet, so add one line to two of
-them, after the sender is set up (0a to 0d).
+own sign-in. Mole's emails don't print a code yet, and they are plain, so this
+step gives all six a code where it belongs and Mole's look, with Sunny. It
+comes after the sender is set up (0a to 0d, done 9 Oct).
 
 **First, Mole V3 must send its own emails.** Supabase won't let you edit the
 email templates until a custom email sender (SMTP) is set up: the Magic Link
@@ -167,29 +168,39 @@ key from 0a, sender email `noreply@mole.is`, sender name `Mole`. Save.
 
 Then:
 
-**1.** Magic Link: replace the whole email with a code-only one. Mole V3 has
-no magic-link sign-in, so nothing needs the link. Open this, press **Raw**,
-select all, copy:
-**https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/magic-link-body.html**
+**1.** Paste the six new emails. They are Mole's colours with Sunny, one for
+each email Supabase sends. **Start with Magic link or OTP and Confirm signup**:
+those two carry the sign-in code, so they matter most. The other four are the
+same look for the rest.
 
-**2.** Open Mole V3's email templates:
+For each row below: open the link, press **Raw**, select all, copy. Then open
+Mole V3's email templates, choose that template **by name**, press **Source**,
+select everything in the body, paste, set the **Subject** to the one in the
+row, and press **Save**:
 **https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/auth/templates**
 
-**3.** Open **Magic Link**. Press **Source**, select everything in the body,
-paste. Change **Subject** to `Your Mole sign-in code`. Press **Save**.
+| Template (its name in Supabase) | Paste this file | Subject |
+|---|---|---|
+| **Confirm signup** | [confirm-signup.html](https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/emails/confirm-signup.html) | `Welcome to Mole: confirm your email` |
+| **Magic link or OTP** | [magic-link-or-otp.html](https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/emails/magic-link-or-otp.html) | `Your Mole sign-in code` |
+| **Invite user** | [invite-user.html](https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/emails/invite-user.html) | `You are invited to Mole` |
+| **Reset password** | [reset-password.html](https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/emails/reset-password.html) | `Reset your Mole password` |
+| **Change email address** | [change-email-address.html](https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/emails/change-email-address.html) | `Confirm your new Mole email address` |
+| **Reauthentication** | [reauthentication.html](https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/emails/reauthentication.html) | `Your Mole confirmation code` |
 
-**4.** Confirm signup is different: **keep its link** (it's how a new person
-confirms their email) and only add one line at the very end. Open this line,
-press **Raw**, select all, copy:
-**https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/sign-in-code.html**
-Open **Confirm signup**, press **Source**, click at the very end of the body,
-press Enter, paste, **Save**. Afterwards the body must still contain
-`{{ .ConfirmationURL }}`.
+Replace the whole body each time. Each file already has its link or code in it
+(`{{ .ConfirmationURL }}`, `{{ .Token }}`), so there is nothing to keep from
+the old one.
 
-→ **Done when:** on sense.mole.is you type your email, press **Email me a
-code**, get an email with six digits in it, type them, and land on **Your
-events**. A bad answer is an email with only a link and no number: the line
-went into the wrong template, or wasn't saved.
+The pictures load from **https://sense.mole.is/email/**, which is live now.
+Press **Preview** after pasting: you should see the Mole logo, a purple band,
+and Sunny on a pale yellow circle. If the pictures are missing, that address
+isn't answering: tell me.
+
+→ **Done when:** all six show Sunny in **Preview**, and (after steps 1 to 5)
+on sense.mole.is you type your email, press **Email me a code**, get an email
+with six digits in it, type them, and land on **Your events**. A bad answer is
+an email with only a link and no number: Magic link or OTP wasn't saved.
 
 ## ☐ 8 · Connect PLExyz · **waiting on reka.re**
 
