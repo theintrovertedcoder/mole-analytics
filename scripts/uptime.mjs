@@ -31,8 +31,11 @@ export async function checkSite(fetchFn, url) {
   let res;
   try { res = await get(fetchFn, url); } catch (e) { return `${url} didn't answer: ${e.message}`; }
   if (res.status !== 200) {
-    const blocked = res.status === 403 ? ' (a 403 can be Cloudflare turning this check away, not the site being down: see docs/YOUR_TURN.md, "Uptime check")' : '';
-    return `${url} answered ${res.status}${blocked}`;
+    // Who said no: Cloudflare names a challenge in cf-mitigated, and every
+    // answer it gives carries cf-ray; the site's own 403 carries neither.
+    const seen = ['server', 'cf-mitigated', 'cf-ray'].map(h => [h, res.headers.get(h)]).filter(([, v]) => v).map(([h, v]) => `${h}: ${v}`);
+    const blocked = res.status === 403 ? ' (a 403 can be Cloudflare turning this check away, not the site being down)' : '';
+    return `${url} answered ${res.status}${seen.length ? ` [${seen.join(', ')}]` : ''}${blocked}`;
   }
   const html = await res.text();
   if (!html.includes('<div id="root">')) return `${url} answered, but not with the Mole Sense app`;
