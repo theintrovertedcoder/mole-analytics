@@ -11,12 +11,16 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 const TIMEOUT_MS = 15_000;
+// A monitor's usual shape ("Mozilla/5.0 (compatible; …)"). Cloudflare's Browser
+// Integrity Check answers 403 to an unfamiliar bare name, and the check then
+// reports the site down when it is only the check that was turned away.
+const UA = 'Mozilla/5.0 (compatible; MoleSenseUptime/1.0; +https://sense.mole.is)';
 
 async function get(fetchFn, url) {
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), TIMEOUT_MS);
   try {
-    return await fetchFn(url, { signal: ctl.signal, headers: { 'User-Agent': 'mole-sense-uptime' } });
+    return await fetchFn(url, { signal: ctl.signal, headers: { 'User-Agent': UA } });
   } finally {
     clearTimeout(t);
   }
@@ -26,7 +30,10 @@ async function get(fetchFn, url) {
 export async function checkSite(fetchFn, url) {
   let res;
   try { res = await get(fetchFn, url); } catch (e) { return `${url} didn't answer: ${e.message}`; }
-  if (res.status !== 200) return `${url} answered ${res.status}`;
+  if (res.status !== 200) {
+    const blocked = res.status === 403 ? ' (a 403 can be Cloudflare turning this check away, not the site being down: see docs/YOUR_TURN.md, "Uptime check")' : '';
+    return `${url} answered ${res.status}${blocked}`;
+  }
   const html = await res.text();
   if (!html.includes('<div id="root">')) return `${url} answered, but not with the Mole Sense app`;
   return null;
