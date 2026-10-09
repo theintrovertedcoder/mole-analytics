@@ -133,12 +133,35 @@ Only add to that list. **Don't change the Site URL.**
 → **Done when:** "Continue with Google" on sense.mole.is lands you on **Your
 events**, showing your Loop org's events.
 
-## ☐ 7b · Put the sign-in code in Mole's emails · 3 minutes
+## ☐ 7b · Put the sign-in code in Mole's emails · 15 minutes
 
 Needed once the site is on real data. Mole Sense now signs people in with a
 6-digit code from their email (no password to make or forget), using Mole V3's
 own sign-in. Mole's emails don't print a code yet, so add one line to two of
-them.
+them, after the sender is set up (0a to 0d).
+
+**First, Mole V3 must send its own emails.** Supabase won't let you edit the
+email templates until a custom email sender (SMTP) is set up: the Magic Link
+page shows "Set up custom SMTP to edit templates". Mole V3's launch runbook
+already plans this switch to Resend, which Mole V3 uses for its other emails.
+
+**0a.** Make a key just for this at Resend (Sending access is enough), and keep
+it somewhere private. **Never paste it into a chat or a file:**
+**https://resend.com/api-keys**
+
+**0b.** Check the address you'll send from is on a verified domain (it shows
+**Verified**):
+**https://resend.com/domains**
+
+**0c.** On the Magic Link page, press **Set up SMTP**:
+**https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/auth/templates**
+Fill in: host `smtp.resend.com`, port `465`, username `resend`, password = the
+key from 0a, and a sender address on the verified domain. Save.
+
+**0d.** In Resend, check the **Emails** list shows the test email Supabase sends:
+**https://resend.com/emails**
+
+Then:
 
 **1.** Open the line to paste, press **Raw**, select all, copy:
 **https://github.com/theintrovertedcoder/mole-analytics/blob/claude/sleepy-ramanujan-hr1ygm/docs/paste/sign-in-code.html**
