@@ -202,6 +202,55 @@ on sense.mole.is you type your email, press **Email me a code**, get an email
 with six digits in it, type them, and land on **Your events**. A bad answer is
 an email with only a link and no number: Magic link or OTP wasn't saved.
 
+## ☐ 7c · Let the uptime check and the email pictures through Cloudflare · 10 minutes
+
+**What I found (9 Oct).** Cloudflare, which sits in front of sense.mole.is,
+answers GitHub's servers with a challenge ("prove you're human"), so the
+half-hourly uptime check can't tell whether the site is up. The same could
+happen to the pictures in the emails (Sunny, the logo), which Gmail fetches from
+`https://sense.mole.is/email/`. People in a browser pass a challenge; robots
+don't. The check is **paused** until this is done, so you aren't emailed every
+half hour.
+
+**1.** Open the Cloudflare dashboard for mole.is, Security, WAF, Custom rules:
+**https://dash.cloudflare.com/e8c3362874d534ce0c1c3d9d1d324f12/mole.is/security/waf/custom-rules**
+(I couldn't open it from here, so if it says "not found": go to
+https://dash.cloudflare.com, choose **mole.is**, then **Security → WAF →
+Custom rules**.)
+
+**2.** Press **Create rule** and fill it in:
+- **Rule name:** `Let Mole Sense's uptime check and email pictures through`
+- **When incoming requests match:** use **Edit expression** and paste:
+
+      (http.host eq "sense.mole.is") and ((http.user_agent contains "MoleSenseUptime") or (starts_with(http.request.uri.path, "/email/")))
+
+- **Then take action:** **Skip**, and tick every box it offers, including
+  **All remaining custom rules**, **All managed rules**, **All Super Bot Fight Mode Rules** (if shown), **Browser Integrity Check** and **Security Level**.
+- Press **Deploy**.
+
+That opens only two things: the check (by its name in the request) and the
+pictures in `/email/`. Both are public. Anyone can fake the name, and all that
+gets them is the public site, which anyone can already open.
+
+**3.** If Cloudflare says a box isn't available on your plan, or the check is
+still challenged after step 2: open **Security → Bots**
+(**https://dash.cloudflare.com/e8c3362874d534ce0c1c3d9d1d324f12/mole.is/security/bots**).
+If **Bot Fight Mode** is on, it can't be skipped by a rule on the free plan.
+Turning it off affects all of mole.is, so that's your call: tell me which you
+want (turn it off, or leave it on and I'll host the email pictures somewhere
+else and stop the uptime check).
+
+**4.** Run the check by hand: press **Run workflow** here:
+**https://github.com/theintrovertedcoder/mole-analytics/actions/workflows/uptime.yml**
+
+→ **Done when:** that run is green and ends with **is up**. Tell me, and I'll
+turn the half-hourly schedule back on.
+
+Then, once the six emails are pasted (7b), send a real sign-in code to a
+**Gmail** address of yours: Gmail fetches the pictures through its own proxy,
+which is the case worth seeing with your own eyes. If Sunny is missing there,
+tell me and say which email program you used.
+
 ## ☐ 8 · Connect PLExyz · **waiting on reka.re**
 
 Send reka.re the questions in `docs/PLEXYZ_INTEGRATION.md` (*What we assumed,

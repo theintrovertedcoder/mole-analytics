@@ -5,8 +5,12 @@
 name: Uptime
 
 on:
-  schedule:
-    - cron: '7,37 * * * *'
+  # PAUSED 9 Oct: Cloudflare answers GitHub's servers with a challenge (a 403
+  # with cf-mitigated: challenge), so every run fails and GitHub emails each
+  # failure. It comes back when docs/YOUR_TURN.md step 7c is done and a manual
+  # run is green: put the two lines below back.
+  #   schedule:
+  #     - cron: '7,37 * * * *'
   workflow_dispatch:
 
 permissions:

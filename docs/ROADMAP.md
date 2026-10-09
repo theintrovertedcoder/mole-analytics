@@ -59,7 +59,7 @@ D-1 to D-4 were decided on 8 Oct and are built (`DECISIONS.md` D24–D27).
 |---|---|---|
 | **W-14** | The backend has never been deployed, migration 119 hasn't run, and the V3 branch isn't merged | `YOUR_TURN.md` steps 1–5, then a pull request in Mole V3 |
 | **W-15** | The PLExyz connection is built on assumptions | reka.re's API docs (`YOUR_TURN` step 8) |
-| **W-16** | **Partly fixed 9 Oct:** GitHub checks the site every half hour and emails on failure; the backend's health joins once `HEALTH_URL` is set (`YOUR_TURN` 5). Error tracking (Sentry) still to come. Nothing told us when it broke: no error tracking, no uptime check | Sentry and an uptime check on `/api/health` |
+| **W-16** | **Partly fixed 9 Oct, then paused:** the check works, but Cloudflare challenges GitHub's servers (`YOUR_TURN` 7c), so it is off until that's let through; it would have checked the site every half hour and emailed on failure; the backend's health joins once `HEALTH_URL` is set (`YOUR_TURN` 5). Error tracking (Sentry) still to come. Nothing told us when it broke: no error tracking, no uptime check | Sentry and an uptime check on `/api/health` |
 
 ### Sign-in and access
 
