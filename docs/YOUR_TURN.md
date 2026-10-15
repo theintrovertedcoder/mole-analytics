@@ -17,10 +17,11 @@ real thing (with 7b for the sign-in code); step 6 is done.
 
 ## ☐ 1 · Let Mole Sense read Mole · 2 minutes
 
-This is **B26** on Mole V3's own list, and the same thing:
+This is **B26** on Mole V3's own list, and the same thing. (Mole V3's pull request
+with this migration was merged on 15 Oct, so the file is now on `main`.)
 
 **1.** Open the migration, press **Raw**, select all, copy:
-**https://github.com/mole-networking/Mole-V3/blob/claude/sleepy-ramanujan-hr1ygm/supabase/migrations/119_analytics_api_v1.sql**
+**https://github.com/mole-networking/Mole-V3/blob/main/supabase/migrations/119_analytics_api_v1.sql**
 
 **2.** Paste it into Mole V3's SQL editor and press **Run**:
 **https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/sql/new**
