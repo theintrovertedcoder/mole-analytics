@@ -1,0 +1,96 @@
+name: Nightly backup
+# Mole Sense's production database, backed up every night, for free.
+# The same recipe as Mole V3's backup.yml, for this project only: the two are
+# never mixed, so this refuses Mole V3's project whatever the secret says.
+#
+# The Free plan keeps no backups. This takes one every
+# night with the Supabase CLI (roles, schema, data: Supabase's own backup
+# recipe), checks it is a whole database and not an empty file, encrypts it
+# with a passphrase only Haziq holds, and keeps it as a private artifact of this
+# repository: 30 days for a nightly copy, 90 for Sunday's. Nothing leaves
+# GitHub unencrypted, and nothing is written to the repository.
+#
+# Needs two repository secrets, added at
+# https://github.com/theintrovertedcoder/mole-analytics/settings/secrets/actions
+#   BACKUP_DB_URL      the Session pooler connection string, with the password in it
+#                      (Connect → Session pooler; GitHub's servers cannot reach the direct address)
+#   BACKUP_PASSPHRASE  at least 24 characters, from a password manager. Lose it and
+#                      every backup is unreadable, so keep it there.
+#
+# Mole Sense keeps no files in Storage, so the dump is everything.
+#
+# Schedules run only from the default branch, so this starts working once it is
+# merged to the default branch. tests/unit/backupWorkflow.test.ts holds the rules below.
+on:
+  schedule:
+    - cron: '17 18 * * *'   # 02:17 in Singapore, the quietest hour
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nightly-backup
+  cancel-in-progress: false
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BACKUP_DB_URL: ${{ secrets.BACKUP_DB_URL }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+      MOLE_V3_REF: czuquiqpsjwpiqmcllbd
+    steps:
+      - name: Check the two secrets
+        run: |
+          missing=""
+          [ -n "$BACKUP_DB_URL" ] || missing="$missing BACKUP_DB_URL"
+          [ -n "$BACKUP_PASSPHRASE" ] || missing="$missing BACKUP_PASSPHRASE"
+          if [ -n "$missing" ]; then echo "Not set:$missing (mole-api YOUR_TURN step 6)"; exit 1; fi
+          if [ "${#BACKUP_PASSPHRASE}" -lt 24 ]; then echo "BACKUP_PASSPHRASE is shorter than 24 characters."; exit 1; fi
+          case "$BACKUP_DB_URL" in
+            *"$MOLE_V3_REF"*) echo "BACKUP_DB_URL is Mole V3's project. Mole Sense has its own."; exit 1 ;;
+          esac
+          ref=$(printf '%s' "$BACKUP_DB_URL" | sed -nE 's#^postgres(ql)?://postgres\.([a-z]{20}):.*@[^/]*pooler\.supabase\.com.*#\2#p')
+          if [ -z "$ref" ]; then echo "BACKUP_DB_URL is not a Session pooler address. Use Connect → Session pooler."; exit 1; fi
+          echo "Backing up project ${ref:0:8}…"
+
+      - uses: supabase/setup-cli@v1.7.3
+        with:
+          version: 2.119.0
+
+      - name: Dump roles, schema and data
+        run: |
+          supabase db dump --db-url "$BACKUP_DB_URL" -f roles.sql --role-only
+          supabase db dump --db-url "$BACKUP_DB_URL" -f schema.sql
+          supabase db dump --db-url "$BACKUP_DB_URL" -f data.sql --use-copy --data-only
+
+      - name: Check it is a whole database
+        run: |
+          for f in roles.sql schema.sql data.sql; do
+            [ -s "$f" ] || { echo "$f is empty: the dump failed."; exit 1; }
+          done
+          tables=$(grep -ciE '^create table' schema.sql || true)
+          copies=$(grep -c '^COPY ' data.sql || true)
+          echo "Tables in the schema: $tables · tables with data: $copies"
+          [ "$tables" -ge 5 ] || { echo "Only $tables tables: Mole Sense has 5. Not a whole database."; exit 1; }
+          grep -qiE 'create table[^(]*"?public"?\."?presence_sessions"?' schema.sql || { echo "public.presence_sessions is missing."; exit 1; }
+          ls -l roles.sql schema.sql data.sql
+
+      - name: Encrypt
+        id: pack
+        run: |
+          name="mole-sense-$(date -u +%Y-%m-%d)"
+          tar -czf - roles.sql schema.sql data.sql \
+            | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -pass env:BACKUP_PASSPHRASE -out "$name.tar.gz.enc"
+          rm -f roles.sql schema.sql data.sql
+          # Prove it opens with the passphrase before keeping it.
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -pass env:BACKUP_PASSPHRASE -in "$name.tar.gz.enc" | tar -tzf - > /dev/null
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          if [ "$(date -u +%u)" = "7" ]; then echo "keep=90" >> "$GITHUB_OUTPUT"; else echo "keep=30" >> "$GITHUB_OUTPUT"; fi
+          ls -l "$name.tar.gz.enc"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.pack.outputs.name }}
+          path: ${{ steps.pack.outputs.name }}.tar.gz.enc
+          retention-days: ${{ steps.pack.outputs.keep }}
+          if-no-files-found: error
