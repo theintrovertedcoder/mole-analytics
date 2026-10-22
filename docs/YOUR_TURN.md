@@ -15,21 +15,17 @@ real thing (with 7b for the sign-in code); step 6 is done.
 
 ---
 
-## ☐ 1 · Let Mole Sense read Mole · 2 minutes
+## ✓ 1 · Let Mole Sense read Mole · done with Mole V3's release
 
-This is **B26** on Mole V3's own list, and the same thing. (Mole V3's pull request
-with this migration was merged on 15 Oct, so the file is now on `main`.)
+The `api_v1` functions went in with Mole V3's release paste (its migrations 143
+and 145; the file this step used to link was renumbered and no longer exists).
+**Do not paste 143 on its own again:** it puts back an older copy of
+`api_v1_can_see_event` over 145's, which is what Mole V3's drift check found on
+22 Oct. The one-function fix is Mole V3's
+`docs/release/FIX_2026_10_22_API_V1_CAN_SEE_EVENT.sql`.
 
-**1.** Open the migration, press **Raw**, select all, copy:
-**https://github.com/mole-networking/Mole-V3/blob/main/supabase/migrations/119_analytics_api_v1.sql**
-
-**2.** Paste it into Mole V3's SQL editor and press **Run**:
-**https://supabase.com/dashboard/project/czuquiqpsjwpiqmcllbd/sql/new**
-
-A good answer is one row reading **`4 | 0`**. It only adds four read-only
-functions that answer with counts; it changes nothing that exists.
-
-→ **Done when:** the row reads `4 | 0`.
+→ **Done when:** Mole V3's drift check (release step 10) no longer lists
+`api_v1_can_see_event`.
 
 ## ☐ 2 · Create the Mole Sense Supabase project · 5 minutes
 
