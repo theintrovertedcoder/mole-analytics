@@ -26,6 +26,11 @@
    anything is parsed, the delivery id before anything is acted on, and the
    visitor id is hashed before it is stored.
 
+Both functions give a request one id, end to end. When the Mole API gateway
+sends `x-request-id` (8 to 128 letters, digits and `. _ : -`) it is used as is,
+in the response header, in every error body's `requestId` and in the log lines;
+anything else is ignored and a `sense_…` id is made here.
+
 ## The database (`supabase/migrations/`)
 
 `zones` · `devices` · `device_credentials` (kept apart so no `select *` returns

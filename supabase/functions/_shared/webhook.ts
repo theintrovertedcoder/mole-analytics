@@ -23,7 +23,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { applyPairing } from './api.ts';
-import { errorResponse, json } from './http.ts';
+import { errorResponse, json, requestId } from './http.ts';
 import { toPairing, verifySignature, visitorKey } from './plexyz.ts';
 import type { SessionIn, Store } from './store.ts';
 
@@ -37,41 +37,48 @@ export interface WebhookDeps {
 /** At most this many sessions in one delivery; more is a misconfiguration, not traffic. */
 export const MAX_SESSIONS = 5000;
 
+/** A problem answer that carries the request id, like the api function's. */
+function problem(rid: string, code: string, message: string, status: number): Response {
+  return json({ error: { code, message, requestId: rid } }, status, { 'x-request-id': rid });
+}
+
 export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promise<Response> {
   return async (req) => {
+    const rid = requestId(req);
     try {
-      if (req.method !== 'POST') return json({ error: { code: 'invalid', message: 'POST only.' } }, 405);
+      if (req.method !== 'POST') return problem(rid, 'invalid', 'POST only.', 405);
       if (!deps.store || !deps.webhookSecret || !deps.visitorSecret) {
-        return json({ error: { code: 'not_configured', message: 'Webhook secrets are not set.' } }, 503);
+        return problem(rid, 'not_configured', 'Webhook secrets are not set.', 503);
       }
       const raw = await req.text();
       if (!(await verifySignature(deps.webhookSecret, raw, req.headers.get('x-plexyz-signature')))) {
-        return json({ error: { code: 'unauthenticated', message: 'Bad signature.' } }, 401);
+        return problem(rid, 'unauthenticated', 'Bad signature.', 401);
       }
 
       let body: any;
       try {
         body = JSON.parse(raw);
       } catch {
-        return json({ error: { code: 'invalid', message: 'Not JSON.' } }, 400);
+        return problem(rid, 'invalid', 'Not JSON.', 400);
       }
       const type = String(body?.type ?? '');
       const delivery = req.headers.get('x-plexyz-delivery') ?? (body?.id ? String(body.id) : '');
-      if (!delivery) return json({ error: { code: 'invalid', message: 'No delivery id.' } }, 400);
-      if (await deps.store.hasDelivery(delivery)) return json({ ok: true, duplicate: true });
+      if (!delivery) return problem(rid, 'invalid', 'No delivery id.', 400);
+      if (await deps.store.hasDelivery(delivery)) return json({ ok: true, duplicate: true }, 200, { 'x-request-id': rid });
 
-      const res = await handle(deps.store, type, body?.data ?? {}, deps.now?.() ?? new Date(), deps.visitorSecret);
+      const res = await handle(deps.store, type, body?.data ?? {}, deps.now?.() ?? new Date(), deps.visitorSecret, rid);
+      res.headers.set('x-request-id', rid);
       // Only a handled delivery gets a receipt. A concurrent copy that also got
       // here was handled twice, harmlessly; recordDelivery just returns false.
       if (res.ok) await deps.store.recordDelivery(delivery, type || 'unknown');
       return res;
     } catch (e) {
-      return errorResponse(e);
+      return errorResponse(e, {}, rid);
     }
   };
 }
 
-async function handle(store: Store, type: string, data: any, now: Date, visitorSecret: string): Promise<Response> {
+async function handle(store: Store, type: string, data: any, now: Date, visitorSecret: string, rid: string): Promise<Response> {
   const deps = { store, visitorSecret };
 
   if (type === 'pairing.updated') {
@@ -88,7 +95,7 @@ async function handle(store: Store, type: string, data: any, now: Date, visitorS
     const zone = d.zoneId ? await deps.store.getZone(d.zoneId) : null;
     const list: any[] = Array.isArray(data.sessions) ? data.sessions : [];
     if (list.length > MAX_SESSIONS) {
-      return json({ error: { code: 'invalid', message: `At most ${MAX_SESSIONS} sessions per delivery.` } }, 413);
+      return problem(rid, 'invalid', `At most ${MAX_SESSIONS} sessions per delivery.`, 413);
     }
     if (!zone) {
       // Ingest would drop them anyway; saying so here keeps the log honest.
@@ -122,6 +129,6 @@ async function handle(store: Store, type: string, data: any, now: Date, visitorS
   }
 
   // Accepted so PLExyz stops retrying; logged so we notice a new kind.
-  console.log(`plexyz webhook: ignored type "${type}"`);
+  console.log(`[${rid}] plexyz webhook: ignored type "${type}"`);
   return json({ ok: true, ignored: 'unknown type' }, 202);
 }
