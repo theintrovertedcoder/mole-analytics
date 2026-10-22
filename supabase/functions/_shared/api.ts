@@ -20,7 +20,7 @@
 
 import type { MoleEvent, PresenceQuery, ZoneKind } from './contract.ts';
 import { ZONE_KINDS } from './contract.ts';
-import { ApiError, corsHeaders, errorResponse, json, readJson } from './http.ts';
+import { ApiError, corsHeaders, errorResponse, json, readJson, requestId } from './http.ts';
 import type { MoleClient, MoleUser } from './mole.ts';
 import { PlexyzRefusal, type Pairing, type PlexyzClient } from './plexyz.ts';
 import { clampThreshold } from './presence.ts';
@@ -123,6 +123,18 @@ const route = (method: string, pattern: string, h: Handler) => {
   const re = new RegExp('^' + pattern.replace(/:(\w+)/g, '(?<$1>[^/]+)') + '$');
   routes.push([method, re, h]);
 };
+
+/** The route for a path and method, or the right 404 / 405, decided before anyone signs in. */
+export function matchRoute(method: string, path: string): { h: Handler; params: Record<string, string> } {
+  const hits = routes.filter(([, re]) => re.test(path));
+  if (!hits.length) throw new ApiError('not_found', 'No such endpoint.');
+  const hit = hits.find(([m]) => m === method);
+  if (!hit) {
+    const allow = [...new Set(hits.map(([m]) => m)), 'OPTIONS'].join(', ');
+    throw new ApiError('method_not_allowed', `Use ${allow.replace(', OPTIONS', '')} here.`, { Allow: allow });
+  }
+  return { h: hit[2], params: { ...(hit[1].exec(path)!.groups ?? {}) } };
+}
 
 route('GET', '/orgs/:orgId/devices', async (c, p) => {
   await requireOrg(c, p.orgId!);
@@ -286,7 +298,8 @@ export async function applyPairing(store: Store, d: DeviceRow, pairing: Pairing,
 
 export function createApiHandler(deps: ApiDeps): (req: Request) => Promise<Response> {
   return async (req) => {
-    const cors = corsHeaders(req.headers.get('origin'), deps.allowedOrigins);
+    const rid = requestId(req);
+    const cors = { ...corsHeaders(req.headers.get('origin'), deps.allowedOrigins), 'x-request-id': rid };
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
 
     const url = new URL(req.url);
@@ -296,13 +309,22 @@ export function createApiHandler(deps: ApiDeps): (req: Request) => Promise<Respo
     try {
       // A check Haziq can open in a browser tab. Says what is connected and
       // nothing about any value.
+      //   ok        the database and Mole V3 both answer (unchanged meaning)
+      //   status    ok · degraded (PLExyz not connected yet: no pairing) · down
+      // It answers 503 only when down, so a monitor alerts on a real outage.
       if (req.method === 'GET' && path === '/health') {
         const [db, mole] = await Promise.all([
           deps.store ? deps.store.ping() : Promise.resolve(false),
           deps.mole ? deps.mole.health() : Promise.resolve(false),
         ]);
-        return json({ ok: db && mole, database: db, moleV3: mole, plexyz: !!deps.plexyz }, 200, cors);
+        const ok = db && mole;
+        const status = !ok ? 'down' : deps.plexyz ? 'ok' : 'degraded';
+        return json({ ok, status, database: db, moleV3: mole, plexyz: !!deps.plexyz }, ok ? 200 : 503, cors);
       }
+
+      // Unknown paths and wrong methods are answered before sign-in: they cost
+      // nothing upstream and say nothing about any data.
+      const { h, params } = matchRoute(req.method, path);
 
       if (!deps.mole || !deps.store) {
         throw new ApiError('not_configured', 'This backend is missing its settings. See docs/YOUR_TURN.md.');
@@ -312,17 +334,11 @@ export function createApiHandler(deps: ApiDeps): (req: Request) => Promise<Respo
       const user = token ? await deps.mole.user(token) : null;
       if (!user) throw new ApiError('unauthenticated', 'Sign in with your Mole account.');
 
-      for (const [method, re, h] of routes) {
-        const m = re.exec(path);
-        if (m && method === req.method) {
-          const res = await h({ req, url, user, token, deps: deps as ReadyDeps }, { ...(m.groups ?? {}) });
-          for (const [k, v] of Object.entries(cors)) res.headers.set(k, v);
-          return res;
-        }
-      }
-      throw new ApiError('not_found', 'No such endpoint.');
+      const res = await h({ req, url, user, token, deps: deps as ReadyDeps }, params);
+      for (const [k, v] of Object.entries(cors)) res.headers.set(k, v);
+      return res;
     } catch (e) {
-      return errorResponse(e, cors);
+      return errorResponse(e, cors, rid);
     }
   };
 }

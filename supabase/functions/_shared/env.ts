@@ -13,13 +13,14 @@
 //   PLEXYZ_API_KEY          our key for that API             (secret)
 //   PLEXYZ_WEBHOOK_SECRET   what PLExyz signs deliveries with (secret)
 //   VISITOR_KEY_SECRET      hashes visitor ids; any long random string (secret)
+//   MOLE_CACHE_SECONDS      how long to keep Mole V3's answers (default 60; 0 = off)
 //
 // A missing PLExyz value leaves pairing switched off with a plain message,
 // not a crash, so the rest can be set up and checked before reka.re replies.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { createApiHandler, type ApiDeps } from './api.ts';
-import { httpMoleClient } from './mole.ts';
+import { cachedMoleClient, httpMoleClient } from './mole.ts';
 import { httpPlexyzClient } from './plexyz.ts';
 import { postgrestStore } from './store.ts';
 import { createWebhookHandler } from './webhook.ts';
@@ -32,6 +33,12 @@ function base(get: Get) {
   return { supaUrl, store: supaUrl && serviceKey ? postgrestStore(supaUrl, serviceKey) : null };
 }
 
+/** MOLE_CACHE_SECONDS, read safely: a typo means the default, never "cache for ever". */
+export function cacheSeconds(get: Get): number {
+  const n = Number(get('MOLE_CACHE_SECONDS') ?? 60);
+  return Number.isFinite(n) ? Math.max(0, Math.min(300, Math.round(n))) : 60;
+}
+
 export function apiFromEnv(get: Get) {
   const { supaUrl, store } = base(get);
   const moleUrl = get('MOLE_SUPABASE_URL');
@@ -40,7 +47,7 @@ export function apiFromEnv(get: Get) {
   const plexKey = get('PLEXYZ_API_KEY');
   const deps: ApiDeps = {
     store,
-    mole: moleUrl && moleAnon ? httpMoleClient(moleUrl, moleAnon) : null,
+    mole: moleUrl && moleAnon ? cachedMoleClient(httpMoleClient(moleUrl, moleAnon), cacheSeconds(get)) : null,
     plexyz: plexUrl && plexKey ? httpPlexyzClient(plexUrl, plexKey) : null,
     allowedOrigins: (get('APP_ORIGINS') ?? '').split(',').map(s => s.trim()).filter(Boolean),
     webhookUrl: `${(supaUrl ?? '').replace(/\/+$/, '')}/functions/v1/plexyz_webhook`,
