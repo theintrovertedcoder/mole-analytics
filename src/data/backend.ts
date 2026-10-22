@@ -54,7 +54,8 @@ export interface Backend {
 
 /** An error with a message written for the person reading it. */
 export class UserFacingError extends Error {
-  constructor(message: string, public code: string = 'error') {
+  /** `requestId`, when the server gave one, is what support needs to find the request. */
+  constructor(message: string, public code: string = 'error', public requestId?: string) {
     super(message);
   }
 }
