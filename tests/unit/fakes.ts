@@ -85,6 +85,9 @@ export function memoryStore() {
       }
       return { received: rows.length, stored, dropped_no_zone: 0 };
     },
+    async hasDelivery(id) {
+      return deliveries.has(id);
+    },
     async recordDelivery(id) {
       if (deliveries.has(id)) return false;
       deliveries.add(id);

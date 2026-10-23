@@ -140,12 +140,15 @@ export interface PresenceQuery {
   bucketSeconds: number;
 }
 
-/** Errors the api function returns, as `{ error: { code, message } }`. */
+/** Errors the api function returns, as `{ error: { code, message, requestId } }`. */
 export type ApiErrorCode =
   | 'unauthenticated'
   | 'forbidden'
   | 'not_found'
+  | 'method_not_allowed'
   | 'invalid'
   | 'conflict'
-  | 'upstream'
-  | 'not_configured';
+  | 'upstream'       // another service answered with an error (502)
+  | 'unavailable'    // another service did not answer in time, or at all (503)
+  | 'not_configured'
+  | 'internal';      // a bug here; the detail is in the function log, never the response

@@ -72,7 +72,10 @@ describe('who may do what', () => {
     const theirs = await call('PATCH', `/zones/${z.id}`, { body: { name: 'mine now' } });
     const nobody = await call('PATCH', `/zones/${uuid()}`, { body: { name: 'x' } });
     expect(theirs.status).toBe(404);
-    expect(theirs.body).toEqual(nobody.body);
+    // Same code and message; only the per-request id differs.
+    const { requestId: _a, ...t } = theirs.body.error;
+    const { requestId: _b, ...n } = nobody.body.error;
+    expect(t).toEqual(n);
   });
 
   it("will not place your sensor in another org's zone", async () => {
@@ -193,7 +196,7 @@ describe('the edges', () => {
   it('has a health check that needs no sign-in and reveals no values', async () => {
     const r = await call('GET', '/health', { token: '' });
     expect(r.status).toBe(200);
-    expect(r.body).toEqual({ ok: true, database: true, moleV3: true, plexyz: true });
+    expect(r.body).toEqual({ ok: true, status: 'ok', database: true, moleV3: true, plexyz: true });
   });
 
   it('says "no such endpoint" rather than guessing', async () => {

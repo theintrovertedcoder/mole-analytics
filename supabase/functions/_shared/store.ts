@@ -10,6 +10,7 @@
 
 import type { Device, DeviceStatus, PresenceQuery, PresenceReport, Zone, ZoneKind } from './contract.ts';
 import { ApiError } from './http.ts';
+import { callUpstream } from './upstream.ts';
 import { normaliseReport } from './report.ts';
 
 export interface DeviceRow extends Device {
@@ -52,6 +53,8 @@ export interface Store {
   report(eventId: string, q: PresenceQuery): Promise<PresenceReport>;
   ingest(deviceId: string, rows: SessionIn[]): Promise<{ received: number; stored: number; dropped_no_zone: number }>;
   /** False if this delivery was already handled. */
+  /** Whether a delivery was already handled. Checked first; recorded only after it is handled. */
+  hasDelivery(id: string): Promise<boolean>;
   recordDelivery(id: string, kind: string): Promise<boolean>;
   ping(): Promise<boolean>;
 }
@@ -98,10 +101,10 @@ export function postgrestStore(url: string, serviceKey: string, f: typeof fetch 
   };
 
   async function req(path: string, init: RequestInit = {}, prefer?: string): Promise<any> {
-    const res = await f(`${base}${path}`, {
+    const res = await callUpstream('the Mole Sense database', `${base}${path}`, {
       ...init,
       headers: { ...H, ...(prefer ? { Prefer: prefer } : {}) },
-    });
+    }, { fetch: f });
     if (res.status === 204) return null;
     const text = await res.text();
     const body = text ? JSON.parse(text) : null;
@@ -209,6 +212,9 @@ export function postgrestStore(url: string, serviceKey: string, f: typeof fetch 
     },
     async ingest(deviceId, rows) {
       return req('/rpc/ingest_presence', { method: 'POST', body: JSON.stringify({ p_device_id: deviceId, p_rows: rows }) });
+    },
+    async hasDelivery(id) {
+      return !!one(await req(`/webhook_receipts?delivery_id=eq.${q(id)}&select=delivery_id&limit=1`));
     },
     async recordDelivery(id, kind) {
       try {

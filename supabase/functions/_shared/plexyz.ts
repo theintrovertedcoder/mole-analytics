@@ -19,6 +19,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { ApiError } from './http.ts';
+import { callUpstream } from './upstream.ts';
 
 export type PairingState = 'pending' | 'approved' | 'rejected' | 'expired';
 
@@ -60,14 +61,7 @@ export function httpPlexyzClient(baseUrl: string, apiKey: string, f: typeof fetc
   const headers = { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
 
   async function call(path: string, init: RequestInit): Promise<Response> {
-    let res: Response;
-    try {
-      res = await f(`${base}${path}`, { ...init, headers: { ...headers, ...(init.headers ?? {}) } });
-    } catch (e) {
-      console.error('plexyz unreachable', e);
-      throw new ApiError('upstream', "PLExyz didn't answer. Try again in a minute.");
-    }
-    return res;
+    return callUpstream('PLExyz', `${base}${path}`, { ...init, headers: { ...headers, ...(init.headers ?? {}) } }, { fetch: f });
   }
 
   return {
