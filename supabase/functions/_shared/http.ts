@@ -22,12 +22,14 @@ export class ApiError extends Error {
   }
 }
 
-// One id per request, from the caller (the Mole API gateway sends one) or made
-// here, so a line in any log can be matched to the answer someone saw.
-const SAFE_ID = /^[A-Za-z0-9._-]{8,64}$/;
-export function requestId(req: Request): string {
+// One id per request, end to end: the Mole API gateway sends `x-request-id` and
+// it is used as is, so one call has one id in the gateway's log, ours and the
+// answer someone saw. A value that is not 8 to 128 of letters, digits and . _ : -
+// is never trusted (it would be written to logs and headers); one is made here.
+export const SAFE_REQUEST_ID = /^[A-Za-z0-9._:-]{8,128}$/;
+export function requestId(req: { headers: { get(name: string): string | null } }): string {
   const given = req.headers.get('x-request-id');
-  return given && SAFE_ID.test(given) ? given : `sense_${crypto.randomUUID().replace(/-/g, '')}`;
+  return given && SAFE_REQUEST_ID.test(given) ? given : `sense_${crypto.randomUUID().replace(/-/g, '')}`;
 }
 
 export function corsHeaders(origin: string | null, allowed: string[]): Record<string, string> {
